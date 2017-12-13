@@ -1,4 +1,4 @@
-# Electron Demo
+# Electron Check
 This is an application I created to showcase the electron framework!
 
 
