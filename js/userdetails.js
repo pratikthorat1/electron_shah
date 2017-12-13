@@ -72,8 +72,10 @@ function populateTable() {
       tableBody += '<tr>';
       tableBody += '  <td>' + persons[i].accountno + '</td>';
       tableBody += '  <td>' + persons[i].name + '</td>';
-      tableBody += '  <td><input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')"></td>'
-      tableBody += '  <td><input type="button" value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
+      tableBody += '  <td><img class="icon" width="10%" onclick="updatePerson(\'' + persons[i].accountno + '\')" src="./img/edit-icon.png"></img>'
+      tableBody += '  <td><img class="icon" width="10%" onclick="deletePerson(\'' + persons[i].accountno + '\')" src="./img/x-icon.png"></img></td>'
+    //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
+    //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
       tableBody += '</tr>';
 
     }
