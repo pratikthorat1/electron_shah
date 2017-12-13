@@ -1,0 +1,8 @@
+i{
+    width:10%;
+    cursor: pointer;
+}
+td,th{
+    border-bottom: 0px !important;
+    border-color: red !important;
+}
