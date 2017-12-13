@@ -106,16 +106,14 @@ function tablecreate(){
 }
 
 function updatePerson(id){
+    //update single user in table
     $("#myModal").modal('show');
     var firstname = document.getElementById('id');
     
     database.singlePerson(id,function(persons){
         firstname.value = persons.name;
-        console.log(persons.name);
+        
     });
     
 }
-// function selectuser(){
-//  facts= database.selectall();
-//   alert(facts);
-// }
+
