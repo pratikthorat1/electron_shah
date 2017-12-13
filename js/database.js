@@ -5,15 +5,16 @@
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./dbfinal.db');
 
+var stringarray=[];
 
 exports.createtable = function() {
   db.run("create table if not exists customers (user_info)");
   alert("tabel created");
 }
 
-var stringarray=[]
+
 // Adds a person
-exports.addPerson = function(stringarray) {
+exports.addPerson = function(sql,stringarray) {
 
   // Create the person object
   var person = {
@@ -25,7 +26,7 @@ exports.addPerson = function(stringarray) {
   // Save the person to the database
   //db.insert(person, function(err, newDoc) {
     // Do nothing
-var sql = `INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
+//var sql = `INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
   // insert one row into the langs table
   db.run(sql, stringarray, function(err) {
     if (err) {
@@ -66,10 +67,34 @@ db.run(`DELETE FROM customers WHERE accountno=?`, id, function(err) {
 });
 }
 
-// exports.selectall=function(per){
-//    db.all("SELECT * from customers", function(err, rows) {
-//   per(rows);
-//    alert("hurry");
-//   });
-// }
+exports.updatePerson=function(sql,stringarray){
+
+ db.run(sql, stringarray, function(err) {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log(`Row(s) updated: ${this.changes}`);
+   
+  });
+}
+
+exports.singlePerson=function(id,fct){
+  let sql = `SELECT *
+FROM customers
+WHERE accountno  = ?`;
+let accid = id;
+
+// first row only
+db.get(sql, [accid], (err, row) => {
+if (err) {
+return console.error(err.message);
+}
+console.log( row );
+fct(row);
+//return row;
  
+//: console.log(`No playlist found with the id ${playlistId}`);
+
+});
+}
+  

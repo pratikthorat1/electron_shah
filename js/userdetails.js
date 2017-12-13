@@ -14,12 +14,13 @@ window.onload = function() {
     var firstname = document.getElementById('firstname');
     var lastname = document.getElementById('lastname');
 
+    var sql=`INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
     var stringarr=[];
     stringarr[0]=firstname.value;
     stringarr[1]=1111;
     stringarr[2]=lastname.value;
     // Save the person in the database
-    database.addPerson(stringarr);
+    database.addPerson(sql,stringarr);
 
     // Reset the input fields
     firstname.value = '';
@@ -28,7 +29,34 @@ window.onload = function() {
     // Repopulate the table
     populateTable();
   });
+
+  // Add the update button click event
+document.getElementById('update').addEventListener('click', () => {
+        $("#myModal").modal('show');
+        // Retrieve the input fields
+        var firstname = document.getElementById('firstname');
+        var lastname = document.getElementById('lastname');
+    
+        var sql=`Update customers set name=? where accountno=?`;
+      
+        var stringarr=[];
+        stringarr[0]=lastname.value;
+        stringarr[1]=firstname.value;
+       // stringarr[2]=lastname.value;
+        // Save the person in the database
+        database.updatePerson(sql,stringarr);
+    
+        // Reset the input fields
+        firstname.value = '';
+        lastname.value = '';
+    
+        // Repopulate the table
+        populateTable();
+      });
 }
+
+
+    
 
 // Populates the persons table
 function populateTable() {
@@ -45,6 +73,7 @@ function populateTable() {
       tableBody += '  <td>' + persons[i].accountno + '</td>';
       tableBody += '  <td>' + persons[i].name + '</td>';
       tableBody += '  <td><input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')"></td>'
+      tableBody += '  <td><input type="button" value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
       tableBody += '</tr>';
 
     }
@@ -76,6 +105,16 @@ function tablecreate(){
   database.createtable();
 }
 
+function updatePerson(id){
+    $("#myModal").modal('show');
+    var firstname = document.getElementById('id');
+    
+    database.singlePerson(id,function(persons){
+        firstname.value = persons.name;
+        console.log(persons.name);
+    });
+    
+}
 // function selectuser(){
 //  facts= database.selectall();
 //   alert(facts);
