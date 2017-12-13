@@ -1,3 +1,4 @@
+<<<<<<< HEAD
   @font-face {
       font-family: 'Lato';
       font-style: normal;
@@ -113,4 +114,60 @@
   form {
       width: 65%;
       margin: 30px auto 0 auto;
+=======
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 300;
+    src: url('./font/Lato-Regular.ttf');
+}
+
+body {
+    font-family: "Lato";
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+input[type="button"] {
+    margin-bottom: 0;
+}
+
+.profile {
+    border-radius: 50%;
+    display: block;
+    margin: auto;
+}
+
+.team-container {
+    box-shadow: 0 0 10px #aaa;
+    -moz-box-shadow: 0 0 10px #aaa;
+    -webkit-box-shadow: 0 0 10px #aaa;
+    -o-box-shadow: 0 0 10px #aaa;
+    padding: 20px;
+    text-align: center;
+    margin-top: 30px;
+    background: #fff;
+}
+
+h1 {
+    font-size: 24px !important;
+}
+
+h2 {
+    font-size: 22px !important;
+}
+
+h3 {
+    font-size: 20px !important;
+}
+
+h4 {
+    font-size: 18px !important;
+}
+.icon {
+    width: 1em;
+    cursor: pointer;
+>>>>>>> 18f25094f252018025a4e553be03a11242e0a616
   }

@@ -6,26 +6,15 @@
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/userdetails.js"></script>
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
-
-<body>
-    <div class="container">
-        <a href="index.html">back</a>
-        <script type="text/javascript" src="js/userdetails.js"></script>
-        <script>
-            window.$ = window.jQuery = require("jquery");
-        </script>
-        <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-        </head>
-
-        <body>
+  <body>
             <div class="container">
-
+              <a href="index.html">back</a>
                 <h3>Add a person:</h3>
                 <div class="row">
                     <div class="five columns">
@@ -40,6 +29,10 @@
                         <label for="add" class="invisible">x</label>
                         <input class="button-primary" value="Add" id="add" type="button">
                     </div>
+                    <div class="two columns">
+                      <label for="Update" class="invisible">x</label>
+                      <input class="button-primary" value="Update" id="update" type="button">
+                  </div>
                 </div>
 
                 <h3>All persons:</h3>
@@ -83,7 +76,28 @@
                     </div>
                 </div>
             </div>
+            <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal-dialog">
 
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Modal Header</h4>
+          </div>
+          <div class="modal-body">
+            <p>Some text in the modal.</p>
+            <input type="text" id="id">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+</body>
 
 
 
