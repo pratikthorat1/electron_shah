@@ -11,8 +11,9 @@ exports.createtable = function() {
   alert("tabel created");
 }
 
+var stringarray=[]
 // Adds a person
-exports.addPerson = function(firstname, lastname) {
+exports.addPerson = function(stringarray) {
 
   // Create the person object
   var person = {
@@ -20,12 +21,19 @@ exports.addPerson = function(firstname, lastname) {
     "lastname": lastname
   };
 
+ 
   // Save the person to the database
   //db.insert(person, function(err, newDoc) {
     // Do nothing
-
-  var stmt = db.prepare('Insert into customers (user_info,accountno,name) values ("+ firstname +","+ lastname+","+ lastname +") ') ;
-  stmt.run;
+var sql = `INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
+  // insert one row into the langs table
+  db.run(sql, stringarray, function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+    // get the last insert id
+    console.log(`A row has been inserted with rowid ${this.lastID}`);
+  });
   //});
 };
 
@@ -46,10 +54,16 @@ exports.getPersons = function(fnc) {
 // Deletes a person
 exports.deletePerson = function(id) {
 
-  db.remove({ _id: id }, {}, function(err, numRemoved) {
-    // Do nothing
+// //  db.remove({ _id: id }, {}, function(err, numRemoved) {
+//     // Do nothing
 
-  });
+//   });
+db.run(`DELETE FROM customers WHERE accountno=?`, id, function(err) {
+  if (err) {
+    return console.error(err.message);
+  }
+  console.log(`Row(s) deleted ${this.changes}`);
+});
 }
 
 // exports.selectall=function(per){
