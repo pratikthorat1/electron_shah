@@ -6,23 +6,39 @@ window.onload = function() {
     populateTable();
 
     //   // Add the add button click event
-    //   document.getElementById('add').addEventListener('click', () => {
+    document.getElementById('add').addEventListener('click', () => {
+        var imageToBlob = require('image-to-blob'),
+            foo = document.getElementById('image'),
+            DOMURL = window.URL || window.webkitURL || window;
 
-    //     // Retrieve the input fields
-    //     var firstname = document.getElementById('firstname');
-    //     var lastname = document.getElementById('lastname');
+        function appendBlob(err, blob) {
+            if (err) {
+                console.error(err);
+                return;
+            }
 
-    //     // Save the person in the database
-    //     database.addPerson(firstname.value, lastname.value);
+            console.log(blob);
+            var img = document.createElement('img');
+            img.src = DOMURL.createObjectURL(blob);
+            document.body.appendChild(img);
+        }
 
-    //     // Reset the input fields
-    //     firstname.value = '';
-    //     lastname.value = '';
+        imageToBlob(foo, appendBlob);
+        //     // Retrieve the input fields
+        //     var firstname = document.getElementById('firstname');
+        //     var lastname = document.getElementById('lastname');
 
-    //     // Repopulate the table
-    //     populateTable();
-    //   });
-    // }
+        //     // Save the person in the database
+        //     database.addPerson(firstname.value, lastname.value);
+
+        //     // Reset the input fields
+        //     firstname.value = '';
+        //     lastname.value = '';
+
+        //     // Repopulate the table
+        //     populateTable();
+    });
+
 
     // // Populates the persons table
     function populateTable() {
