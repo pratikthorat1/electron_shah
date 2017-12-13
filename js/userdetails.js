@@ -14,8 +14,12 @@ window.onload = function() {
     var firstname = document.getElementById('firstname');
     var lastname = document.getElementById('lastname');
 
+    var stringarr=[];
+    stringarr[0]=firstname.value;
+    stringarr[1]=1111;
+    stringarr[2]=lastname.value;
     // Save the person in the database
-    database.addPerson(firstname.value,1110, lastname.value);
+    database.addPerson(stringarr);
 
     // Reset the input fields
     firstname.value = '';
