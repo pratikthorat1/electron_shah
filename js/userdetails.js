@@ -11,7 +11,7 @@ window.onload = function() {
   document.getElementById('add').addEventListener('click', () => {
 
     // // Retrieve the input fields
-     var firstname = document.getElementById('firstname');
+     var firstname = document.getElementById('firstname').value;
     // var lastname = document.getElementById('lastname');
 
     // var sql=`INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
@@ -28,7 +28,7 @@ window.onload = function() {
 
     // // Repopulate the table
     // populateTable();
-    populateProgressTable(id);
+    populateProgressTable(firstname);
   });
 
   // Add the update button click event
@@ -92,7 +92,7 @@ function populateProgressTable(id) {
   
     // Retrieve the persons
     database.getPersonsProgress(id,function(persons) {
-      
+      console.log(persons.length);
       // Generate the table body
       var tableBody = '';
       for (i = 0; i < persons.length; i++) {
