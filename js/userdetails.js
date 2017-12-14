@@ -1,6 +1,7 @@
 const database = require('./js/database');
 
 window.onload = function() {
+<<<<<<< HEAD
     // var user = $_GET('user');
     //user id from URL
     //  var url = "http://www.example.com/index.php?myParam=384&login=admin"; // or window.location.href for current url
@@ -13,11 +14,18 @@ window.onload = function() {
     populateProgressTable(myParam);
     populateMeasurementTable(myParam);
     // populateTable();
+=======
+    var user = $_POST('user');
+    console.log(user);
+    // Populate the table
+    populateTable();
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
     //tablecreate();
 
     // Add the add button click event
     document.getElementById('add').addEventListener('click', () => {
 
+<<<<<<< HEAD
         // // Retrieve the input fields
         var firstname = document.getElementById('firstname').value;
         // var lastname = document.getElementById('lastname');
@@ -37,6 +45,26 @@ window.onload = function() {
         // // Repopulate the table
         // populateTable();
         populateProgressTable(firstname);
+=======
+        // Retrieve the input fields
+        var firstname = document.getElementById('firstname');
+        var lastname = document.getElementById('lastname');
+
+        var sql = `INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
+        var stringarr = [];
+        stringarr[0] = firstname.value;
+        stringarr[1] = 1111;
+        stringarr[2] = lastname.value;
+        // Save the person in the database
+        database.addPerson(sql, stringarr);
+
+        // Reset the input fields
+        firstname.value = '';
+        lastname.value = '';
+
+        // Repopulate the table
+        populateTable();
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
     });
 
     // Add the update button click event
@@ -49,8 +77,13 @@ window.onload = function() {
         var sql = `Update customers set name=? where accountno=?`;
 
         var stringarr = [];
+<<<<<<< HEAD
         stringarr[0] = document.getElementById('firstname').value;
         stringarr[1] = ocument.getElementById('lastname').value;
+=======
+        stringarr[0] = lastname.value;
+        stringarr[1] = firstname.value;
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
         // stringarr[2]=lastname.value;
         // Save the person in the database
         database.updatePerson(sql, stringarr);
@@ -71,6 +104,7 @@ window.onload = function() {
 function populateTable() {
 
     // selectuser();
+<<<<<<< HEAD
 
     // Retrieve the persons
     database.getPersons(function(persons) {
@@ -101,10 +135,17 @@ function populateProgressTable(id) {
     // Retrieve the persons
     database.getPersonsProgress(id, function(persons) {
         console.log(persons.length);
+=======
+
+    // Retrieve the persons
+    database.getPersons(function(persons) {
+
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
         // Generate the table body
         var tableBody = '';
         for (i = 0; i < persons.length; i++) {
             tableBody += '<tr>';
+<<<<<<< HEAD
             tableBody += '  <td>' + persons[i].prog_date + '</td>';
             tableBody += '  <td>' + persons[i].prog_weight + '</td>';
             tableBody += '  <td>' + persons[i].foodpkt + '</td>';
@@ -122,6 +163,12 @@ function populateProgressTable(id) {
             tableBody += '  <td width="300px";>' + persons[i].remark + '</td>';
             tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonProgress(\'' + persons[i].memberno + '\')" "></i>'
             tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i></td>'
+=======
+            tableBody += '  <td>' + persons[i].accountno + '</td>';
+            tableBody += '  <td>' + persons[i].name + '</td>';
+            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePerson(\'' + persons[i].accountno + '\')" "></i>'
+            tableBody += '  <td><i class="fa fa-trash" aria-hidden="true" onclick="deletePerson(\'' + persons[i].accountno + '\')" "></i></td>'
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
                 //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
                 //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
             tableBody += '</tr>';
@@ -132,6 +179,7 @@ function populateProgressTable(id) {
         document.getElementById('tablebody').innerHTML = tableBody;
     });
 }
+<<<<<<< HEAD
 
 
 // Deletes a person
@@ -150,12 +198,31 @@ function deletePersonProgress(id, dt) {
 
 
 
+=======
+
+// Deletes a person
+function deletePerson(id) {
+
+    var x = confirm("Are you sure you want to delete?");
+    if (x) {
+        // Delete the person from the database
+        database.deletePerson(id);
+        return true;
+    } else
+        return false;
+
+
+
+    // Repopulate the table
+    populateTable();
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
 }
 
 function tablecreate() {
     database.createtable();
 }
 
+<<<<<<< HEAD
 function updatePersonProgress(id) {
     //update single user in table
     $("#myModal").modal('show');
@@ -219,6 +286,16 @@ function updatePersonMeasurement(id) {
         // console.log(persons);
         firstname.value = persons.person_nm;
 
+=======
+function updatePerson(id) {
+    //update single user in table
+    $("#myModal").modal('show');
+    var firstname = document.getElementById('id');
+
+    database.singlePerson(id, function(persons) {
+        firstname.value = persons.name;
+
+>>>>>>> da9effcbebaf1015163e240c65311654cca1dfa2
     });
 
 }
