@@ -1,4 +1,6 @@
 const database = require('./js/database');
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('./dbfinal.db');
 
 window.onload = function() {
 
@@ -12,6 +14,21 @@ window.onload = function() {
         blobUtil.imgSrcToBlob(img.src).then(function(blob) {
             var i = blob;
             console.log(i);
+            var sql = "insert into image_table(memberno, img1) values (?,?)";
+
+            db.run(sql, 12, blob, function(err) {
+                if (err) {
+                    return console.log(err.message);
+                }
+                // get the last insert id
+                console.log(`A row has been inserted with rowid ${this.lastID}`);
+            });
+            var blobURL = blobUtil.createObjectURL(blob);
+
+            var newImg = document.createElement('img');
+            newImg.src = blobURL;
+
+            document.body.appendChild(newImg);
         }).catch(function(err) {
             console.log(err);
         });
@@ -55,7 +72,7 @@ window.onload = function() {
                 var blob = new Blob([bytes], { type: 'image/bmp' });
 
                 // Use createObjectURL to make a URL for the blob
-                tableBody += '<div class = "col-md-4" ><a href = "userdetails.html?' + persons[i].num + '" >';
+                tableBody += '<div class = "col-md-4" ><a href = "userdetails.html?user=' + persons[i].num + '" >';
                 tableBody += '<div class="team-container">';
                 tableBody += '<img id="check" class="profile" src="' + URL.createObjectURL(blob) + '"> <h1>' + persons[i].name + '</h1>';
                 tableBody += ' <h3>Last Visit:' + persons[i].last + '</h3>';
