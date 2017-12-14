@@ -63,10 +63,6 @@ exports.getPersonsProgress = function(id,fnc) {
 // Deletes a person
 exports.deletePerson = function(id) {
 
-// //  db.remove({ _id: id }, {}, function(err, numRemoved) {
-//     // Do nothing
-
-//   });
 db.run(`DELETE FROM customers WHERE accountno=?`, id, function(err) {
   if (err) {
     return console.error(err.message);
