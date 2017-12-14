@@ -51,7 +51,6 @@ exports.getPersons = function(fnc) {
     //   fnc(docs);
     // });
 }
-exports.getallrows = function(fna) {
 
     // db.all("select up.memberno as memberno,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it", function(err, rows) {
     //     fnc(rows);
