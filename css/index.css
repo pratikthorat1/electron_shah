@@ -7,6 +7,7 @@
   
   body {
       font-family: "Lato" !important;
+      background: #f7f9fc !important;
   }
   
   .invisible {
@@ -70,6 +71,11 @@
       color: #848484 !important;
   }
   
+  a:focus {
+      outline: none !important;
+      color: #848484 !important;
+  }
+  
   a:hover {
       text-decoration: none !important;
       color: #848484 !important;
@@ -114,4 +120,37 @@
   form {
       width: 65%;
       margin: 20px auto 0 auto;
+  }
+  
+  .myButton {
+      -moz-box-shadow: 1px 2px 5px 1px #6d706c;
+      -webkit-box-shadow: 1px 2px 5px 1px #6d706c;
+      box-shadow: 1px 2px 5px 1px #6d706c;
+      background-color: #1aa3a3;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+      border-radius: 50%;
+      border: 2px solid #117070;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff !important;
+      font-size: 28px;
+      position: absolute;
+      bottom: 30px;
+      right: 60px;
+      font-weight: bold;
+      padding: 20px 30px;
+      text-decoration: none;
+      text-shadow: 1px 1px 3px #0b5e56;
+      z-index: 9;
+  }
+  
+  .myButton:hover {
+      background-color: #247e7e;
+      color: #fff !important;
+      border: 2px solid #084e4e;
+  }
+  
+  .myButton:active {
+      position: absolute;
   }
