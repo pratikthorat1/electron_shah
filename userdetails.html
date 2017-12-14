@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="css/userdetails.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="js/userdetails.js"></script>
     <script>
-        window.$ = window.jQuery = require("jquery");
+            window.$ = window.jQuery = require("jquery");
     </script>
+    <script type="text/javascript" src="js/userdetails.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
   <body>
@@ -38,51 +38,75 @@
                   </div>
                 </div>
 
-                <h3>All persons:</h3>
-                <table class="u-full-width">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Weight</th>
-                            <th>Food Packets</th>
-                            <th>Recipe1</th>
-                            <th>Recipe2</th>
-                            <th>Recipe3</th>
-                            <th>Recipe4</th>
-                            <th>Total Recipe</th>
-                            <th>Food</th>
-                            <th>Total Food</th>
-                            <th>Month</th>
-                            <th>Weight Lose</th>
-                            <th>Total Lose</th>
-                            <th>BMI</th>
-                            <th>Remarks</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="tablebody">
-                    </tbody>
-                </table>
-            </div>
-            <div id="exTab1" class="container">
+                            </div>
+            <div id="exTab1">
                 <ul class="nav nav-pills">
                     <li class="active">
-                        <a href="#1a" data-toggle="tab">Overview</a>
+                        <a href="#pot" data-toggle="tab">Progress Report</a>
                     </li>
-                    <li><a href="#2a" data-toggle="tab">Using nav-pills</a>
+                    <li><a href="#mgt" data-toggle="tab">Measurement</a>
                     </li>
-                    <li><a href="#3a" data-toggle="tab">Applying clearfix</a>
+                    <li><a href="#3a" data-toggle="tab">ABC</a>
                     </li>
-                    <li><a href="#4a" data-toggle="tab">Background color</a>
+                    <li><a href="#4a" data-toggle="tab">XYZ</a>
                     </li>
                 </ul>
 
                 <div class="tab-content clearfix">
-                    <div class="tab-pane active" id="1a">
-                        <h3>Content's background color is the same for the tab</h3>
+                    <div class="tab-pane active" id="pot">
+                            <h3>All persons:</h3>
+                            <table class="u-full-width">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Weight</th>
+                                        <th>Food<br>Packets</th>
+                                        <th>Recipe<br>1</th>
+                                        <th>Recipe<br>2</th>
+                                        <th>Recipe<br>3</th>
+                                        <th>Recipe<br>4</th>
+                                        <th>Total<br>Recipe</th>
+                                        <th>Food</th>
+                                        <th>Total<br>Food</th>
+                                        <th>Month</th>
+                                        <th>Weight<br>Lose</th>
+                                        <th>Total<br>Lose</th>
+                                        <th>BMI</th>
+                                        <th>Remarks</th>
+                                        <th>Actions</th>
+                                        </tr>
+                                </thead>
+                                <tbody id="tablebody">
+                                </tbody>
+                            </table>       
                     </div>
-                    <div class="tab-pane" id="2a">
-                        <h3>We use the class nav-pills instead of nav-tabs which automatically creates a background color for the tab</h3>
+                    <div class="tab-pane" id="mgt">
+                            <h3>All persons:</h3>
+                            <table class="u-full-width">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Height</th>
+                                        <th>Weight</th>
+                                        <th>Neck</th>
+                                        <th>Sholder</th>
+                                        <th>Midarm</th>
+                                        <th>Chest</th>
+                                        <th>Waist</th>
+                                        <th>Hips</th>
+                                        <th>Weight /<br>Height</th>
+                                        <th>Total<br>Inchs</th>
+                                        <th>Inch<br>Diff.</th>
+                                        <th>Total<br>Inch<br>Diff.</th>
+                                        <th>Weight<br>Diff.</th>
+                                        <th>Total<br>Weight<br>Diff.</th>
+                                        <th>BMI</th>
+                                        <th>Actions</th>
+                                        </tr>
+                                </thead>
+                                <tbody id="tablebodymgt">
+                                </tbody>
+                            </table>          
                     </div>
                     <div class="tab-pane" id="3a">
                         <h3>We applied clearfix to the tab-content to rid of the gap between the tab and the content</h3>

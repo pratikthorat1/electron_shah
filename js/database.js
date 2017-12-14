@@ -55,15 +55,15 @@ exports.getPersons = function(fnc) {
 //get each members database from progress table
 exports.getPersonsProgress = function(id,fnc) {
   
-    db.all("SELECT * from progress_table where memberno=?",id, function(err, rows) {
+    db.all("SELECT * from progress_table where memberno=? ORDER BY prog_date desc",id, function(err, rows) {
       fnc(rows);
     });
  }
 
 // Deletes a person
-exports.deletePerson = function(id) {
+exports.deletePersonProgress = function(id,dt) {
 
-db.run(`DELETE FROM customers WHERE accountno=?`, id, function(err) {
+db.run(`DELETE FROM progress_table WHERE memberno=? and prog_date=?`, id,dt, function(err) {
   if (err) {
     return console.error(err.message);
   }
@@ -82,23 +82,25 @@ exports.updatePerson=function(sql,stringarray){
   });
 }
 
-exports.singlePerson=function(id,fct){
-  let sql = `SELECT *
-FROM customers
-WHERE accountno  = ?`;
-let accid = id;
+exports.singlePerson=function(sql,fct){
+//   let sql = `SELECT *
+// FROM user_profile
+// WHERE memberno  = ?`;
+// let accid = id;
 
 // first row only
-db.get(sql, [accid], (err, row) => {
+db.get(sql, (err, row) => {
 if (err) {
 return console.error(err.message);
 }
 //console.log( row );
 fct(row);
-//return row;
- 
-//: console.log(`No playlist found with the id ${playlistId}`);
-
 });
 }
+  //get each members database from progress table
+exports.getPersonsMeasurement = function(id,fnc) {
   
+    db.all("SELECT * from measurement_table where memberno=? ORDER BY mgt_date desc",id, function(err, rows) {
+      fnc(rows);
+    });
+ }
