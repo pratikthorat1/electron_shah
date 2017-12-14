@@ -11,6 +11,7 @@
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
+    <script src="./node_modules/blob-util/dist/blob-util.js"></script>
     <script type="text/javascript" src="js/userdetails.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
@@ -112,19 +113,20 @@
             <div class="tab-pane" id="photos">
                 <div class="row">
                     <div class="col-md-4 photo">
-                        <input id="input1" type="file">
+
+                        <input id="input1" type="file" onchange="previewFile(1);" accept="image/*" />
                         <input id="imgbtn1" type="button" value="Upload">
                         <img id="img1" src="img/user.png">
 
                     </div>
                     <div class="col-md-4 photo">
-                        <input id="input2" type="file">
+                        <input id="input2" type="file" onchange="previewFile(2);" accept="image/*" />
                         <input id="imgbtn2" type="button" value="Upload">
                         <img id="img2" src="img/user.png">
 
                     </div>
                     <div class="col-md-4 photo">
-                        <input id="input3" type="file">
+                        <input id="input3" type="file" onchange="previewFile(3);" accept="image/*" />
                         <input id="imgbtn3" type="button" value="Upload">
                         <img id="img3" src="img/user.png">
 

@@ -1,5 +1,7 @@
 const database = require('./js/database');
 
+var userid;
+
 window.onload = function() {
     // var user = $_GET('user');
     //user id from URL
@@ -7,13 +9,14 @@ window.onload = function() {
     //  var captured = /myParam=([^&]+)/.exec(url)[1]; // Value is in [1] ('384' in our case)
     //  var result = captured ? captured : 'myDefaultValue';
 
-    var myParam = location.search.split('user=')[1];
-    console.log(myParam);
+    userid = location.search.split('user=')[1];
+    console.log(userid);
     // Populate the table
-    populateProgressTable(myParam);
-    populateMeasurementTable(myParam);
-    // populateTable();
-    //tablecreate();
+    populateProgressTable(userid);
+    populateMeasurementTable(userid);
+    populateImagesTable(userid)
+        // populateTable();
+        //tablecreate();
 
     // Add the add button click event
     document.getElementById('add').addEventListener('click', () => {
@@ -221,4 +224,79 @@ function updatePersonMeasurement(id) {
 
     });
 
+}
+//get photos from database for this user
+function populateImagesTable(id) {
+
+    database.getPersonsImages(id, function(persons) {
+
+
+        if ((persons.img2) != null && (persons.img4) != "") {
+            var data = persons.img2;
+            var bytes = new Uint8Array(data.length / 2);
+            for (var j = 0; j < data.length; j += 2) {
+                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            }
+            // Make a Blob from the bytes
+            var blob = new Blob([bytes], { type: 'image/bmp' });
+            document.getElementById('img1').src = URL.createObjectURL(blob);
+        } else {
+            document.getElementById('img1').src = "img/user.png";
+        }
+        if ((persons.img3) != null && (persons.img4) != "") {
+            var data = persons.img3;
+            var bytes = new Uint8Array(data.length / 2);
+            for (var j = 0; j < data.length; j += 2) {
+                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            }
+            // Make a Blob from the bytes
+            var blob = new Blob([bytes], { type: 'image/bmp' });
+
+            document.getElementById('img2').src = URL.createObjectURL(blob);;
+        } else {
+            document.getElementById('img2').src = "img/user.png";
+        }
+        if ((persons.img4) != null && (persons.img4) != "") {
+            var data = persons.img4;
+            var bytes = new Uint8Array(data.length / 2);
+            for (var j = 0; j < data.length; j += 2) {
+                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            }
+            // Make a Blob from the bytes
+            var blob = new Blob([bytes], { type: 'image/bmp' });
+
+            document.getElementById('img3').src = URL.createObjectURL(blob);;
+        } else {
+            document.getElementById('img3').src = "img/user.png";
+        }
+        // console.log(persons);
+    });
+}
+
+//upload image to the photos page with three diffrent images
+function previewFile(id) {
+    var _URL = window.URL || window.webkitURL;
+    var file;
+    var image = document.getElementById('img' + id);
+    if ((file = $("#input" + id)[0].files[0])) {
+
+        image.src = _URL.createObjectURL(file);
+    }
+
+    function uploadimages(userid, id) {
+
+        var imgid = document.getElementById('img' + id);
+        var lastname = document.getElementById('lastname');
+
+        var sql = `Update image_table set name=? where accountno=?`;
+
+        var stringarr = [];
+        stringarr[0] = document.getElementById('firstname').value;
+        stringarr[1] = ocument.getElementById('lastname').value;
+        // stringarr[2]=lastname.value;
+        // Save the person in the database
+        database.updatePerson(sql, stringarr);
+
+
+    }
 }

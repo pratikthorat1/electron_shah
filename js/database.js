@@ -57,7 +57,7 @@ exports.getallrows = function(fna) {
     // db.all("select up.memberno as memberno,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it", function(err, rows) {
     //     fnc(rows);
     // });
-    var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it`;
+    var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it group by up.memberno`;
 
     db.all(sql, (err, rows) => {
         if (err) {
@@ -81,6 +81,13 @@ exports.getPersonsProgress = function(id, fnc) {
     });
 }
 
+//get each members database from progress table
+exports.getPersonsImages = function(id, fnc) {
+
+    db.get("SELECT * from images_table where memberno=?", id, function(err, rows) {
+        fnc(rows);
+    });
+}
 
 
 // Deletes a person
