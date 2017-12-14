@@ -154,3 +154,8 @@
   .myButton:active {
       position: absolute;
   }
+  
+  .form input {
+      display: inline-block;
+      width: 30%;
+  }
