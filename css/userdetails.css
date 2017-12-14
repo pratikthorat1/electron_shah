@@ -1,34 +1,70 @@
-i{
-    width:10%;
+i {
+    width: 10%;
     cursor: pointer;
 }
-td,th{
+
+@font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 300;
+    src: url('../font/OpenSans-Regular.ttf');
+}
+
+body {
+    font-family: "Lato" !important;
+    background: #f7f9fc !important;
+}
+
+td,
+th {
     border-bottom: 0px !important;
     /* border-color: red !important; */
     text-align: center !important;
 }
 
-#pot,#mgt {
+#pot,
+#mgt {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     border-collapse: collapse;
     width: 100%;
-    padding:10px;
+    padding: 10px;
     text-align: center !important;
 }
 
-#pot td, #pot th,#mgt td, #mgt th {
+#pot td,
+#pot th,
+#mgt td,
+#mgt th {
     border: 1px solid #ddd;
     padding: 8px;
 }
 
-#pot tr:nth-child(even),#mgt tr:nth-child(even){background-color: #f2f2f2;}
+#pot tr:nth-child(even),
+#mgt tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-#pot tr:hover,#mgt tr:hover {background-color: #ddd;}
+#pot tr:hover,
+#mgt tr:hover {
+    background-color: #ddd;
+}
 
-#pot th,#mgt th {
+#pot th,
+#mgt th {
     padding-top: 12px;
     padding-bottom: 12px;
     text-align: left;
     background-color: #4CAF50;
     color: white;
+}
+
+.photo img {
+    display: block;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.photo {
+    width: 100%;
+    margin: auto;
 }
