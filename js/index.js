@@ -6,46 +6,55 @@ window.onload = function() {
 
     // Populate the table
     populateTable();
+    $(".overlay").click(function(e) {
+        $("#imageUpload").click();
+    });
+
+
+
+    $("#imageUpload").change(function() {
+        fasterPreview(this);
+    });
 
     //   // Add the add button click event
-    document.getElementById('add').addEventListener('click', () => {
+    // document.getElementById('add').addEventListener('click', () => {
 
-        var img = document.getElementById("check");
-        blobUtil.imgSrcToBlob(img.src).then(function(blob) {
-            var i = blob;
-            console.log(i);
-            var sql = "insert into image_table(memberno, img1) values (?,?)";
+    //     var img = document.getElementById("check");
+    //     blobUtil.imgSrcToBlob(img.src).then(function(blob) {
+    //         var i = blob;
+    //         console.log(i);
+    //         var sql = "insert into image_table(memberno, img1) values (?,?)";
 
-            db.run(sql, 12, blob, function(err) {
-                if (err) {
-                    return console.log(err.message);
-                }
-                // get the last insert id
-                console.log(`A row has been inserted with rowid ${this.lastID}`);
-            });
-            var blobURL = blobUtil.createObjectURL(blob);
+    //         db.run(sql, 12, blob, function(err) {
+    //             if (err) {
+    //                 return console.log(err.message);
+    //             }
+    //             // get the last insert id
+    //             console.log(`A row has been inserted with rowid ${this.lastID}`);
+    //         });
+    //         var blobURL = blobUtil.createObjectURL(blob);
 
-            var newImg = document.createElement('img');
-            newImg.src = blobURL;
+    //         var newImg = document.createElement('img');
+    //         newImg.src = blobURL;
 
-            document.body.appendChild(newImg);
-        }).catch(function(err) {
-            console.log(err);
-        });
-        //     // Retrieve the input fields
-        //     var firstname = document.getElementById('firstname');
-        //     var lastname = document.getElementById('lastname');
+    //         document.body.appendChild(newImg);
+    //     }).catch(function(err) {
+    //         console.log(err);
+    //     });
+    //     //     // Retrieve the input fields
+    //     //     var firstname = document.getElementById('firstname');
+    //     //     var lastname = document.getElementById('lastname');
 
-        //     // Save the person in the database
-        //     database.addPerson(firstname.value, lastname.value);
+    //     //     // Save the person in the database
+    //     //     database.addPerson(firstname.value, lastname.value);
 
-        //     // Reset the input fields
-        //     firstname.value = '';
-        //     lastname.value = '';
+    //     //     // Reset the input fields
+    //     //     firstname.value = '';
+    //     //     lastname.value = '';
 
-        //     // Repopulate the table
-        //     populateTable();
-    });
+    //     //     // Repopulate the table
+    //     //     populateTable();
+    // });
     // }
 
     // // Populates the persons table
@@ -94,4 +103,11 @@ window.onload = function() {
 
     //   // Repopulate the table
     //   populateTable();
+}
+
+function fasterPreview(uploader) {
+    if (uploader.files && uploader.files[0]) {
+        $('#profileImage').attr('src',
+            window.URL.createObjectURL(uploader.files[0]));
+    }
 }

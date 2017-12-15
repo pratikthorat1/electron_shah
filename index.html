@@ -7,15 +7,17 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script type="text/javascript" src="js/index.js"></script>
+
     <script>
         window.$ = window.jQuery = require("jquery");
     </script>
+    <script type="text/javascript" src="js/index.js"></script>
     <script src="./node_modules/blob-util/dist/blob-util.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
 <body>
+
     <nav class="navbar navbar-default">
         <div class="container-fluid">
 
@@ -70,20 +72,61 @@
                     <h2 class="modal-title">Add New User</h2>
                 </div>
                 <div class="modal-body form">
-                    <label>Image:</label><input type="file" id="image">
-                    <label>Member Id:</label><input type="text" id="memberno">
-                    <label>Name:</label><input type="text" id="name">
-                    <label>Reference:</label><input type="text" id="reference">
-                    <label>Mobile:</label><input type="text" id="memberno">
-                    <label>Alternate:</label><input type="text" id="memberno">
-                    <label>Email:</label><input type="text" id="memberno">
-                    <label>Address:</label><input type="textarea" id="memberno">
-                    <label>Gender:</label><input type="text" id="memberno">
-                    <label>Marital Status:</label><input type="text" id="memberno">
-                    <label>Birthday:</label><input type="text" id="memberno">
-                    <label>Height:</label><input type="text" id="memberno">
-                    <label>Weight:</label><input type="text" id="memberno">
-                    <label>BMI:</label><input type="text" id="memberno">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div id="profile-container">
+                                <image id="profileImage" src="img/user1.png" />
+                                <div class="overlay">
+                                    <div class="text"><i class="fa fa-upload" aria-hidden="true"></i>Upload</div>
+                                </div>
+                            </div>
+                            <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                        </div>
+                        <div class="col-md-8">
+                            <label>Member Id:</label><input type="text" id="memberno" value="G-1217-001" readonly><br>
+                            <label>Name:</label><input type="text" id="name"><br>
+                            <label>Reference:</label><input type="text" id="reference"><br>
+                            <label>Mobile:</label><input type="text" id="memberno">
+                        </div>
+                    </div><br>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label>Alternate No:</label><input type="text" id="memberno">
+                            <label>Address:</label><textarea name="address" id="address" cols="29" rows="10"></textarea>
+                            <label>Height:</label><input type="text" id="memberno">
+                            <label>Weight:</label><input type="text" id="memberno">
+                            <label>Target Weight:</label><input type="text" id="memberno" value="65 Kgs" readonly>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Email:</label>
+                            <input type="text" id="memberno">
+                            <label>Gender:</label>
+                            <input type="radio" name="gender" value="Male">
+                            <span class="label1">Male</span>
+                            </input>
+                            <input type="radio" name="gender" value="Female">
+                            <span class="label1">Female</span>
+                            </input>
+                            <label>M. Status:</label>
+                            <input type="radio" name="married" value="unmarried">
+                            <span class="label1">Unmarried</span>
+                            </input>
+                            <input type="radio" name="married" value="married">
+                            <span class="label1">Married</span>
+                            </input>
+                            <label>Birthday:</label><input type="date" id="memberno">
+                            <label>Age:</label><input type="text" id="memberno" value="30 Years 2 Months and 21 Days" readonly>
+                            <label>Current BMI:</label><input type="text" id="memberno" value="34.3" readonly>
+                            <label>Target BMI:</label><input type="text" id="memberno" value="21.5" readonly>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

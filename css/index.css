@@ -189,7 +189,13 @@
       
       .form input {
           display: inline-block;
-          width: 30%;
+          width: 65%;
+      }
+      
+      .form input[type=radio] {
+          display: inline-block;
+          width: 10%;
+          height: 15px;
       }
       
       .modal-title {
@@ -202,4 +208,90 @@
           font-size: 15px!important;
           right: -10px;
           background-color: red !important;
+      }
+      
+      #myModal .modal-dialog {
+          width: 800px !important;
+      }
+      
+      .modal-content input {
+          margin-bottom: 5px;
+          height: 30px;
+          padding: 6px 5px;
+      }
+      
+      .modal-content textarea {
+          margin-bottom: 5px;
+      }
+      
+      #imageUpload {
+          display: none;
+      }
+      
+      #profileImage {
+          cursor: pointer;
+      }
+      
+      #profile-container {
+          position: relative;
+          margin: auto;
+          width: 135px;
+          height: 135px;
+          overflow: hidden;
+          -webkit-border-radius: 50%;
+          -moz-border-radius: 50%;
+          -ms-border-radius: 50%;
+          -o-border-radius: 50%;
+          border-radius: 50%;
+          border: 1px #dedede solid;
+      }
+      
+      #profile-container img {
+          width: 135px;
+          height: 135px;
+      }
+      
+      .overlay {
+          position: absolute;
+          top: 0;
+          cursor: pointer;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 100%;
+          width: 100%;
+          opacity: 0;
+          transition: .5s ease;
+          background-color: #000;
+      }
+      
+      .text {
+          color: white;
+          z-index: 1;
+          font-size: 20px;
+          position: absolute;
+          top: 50%;
+          text-align: center;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          -ms-transform: translate(-50%, -50%);
+      }
+      
+      #profile-container:hover .overlay {
+          opacity: 0.5;
+      }
+      
+      label {
+          width: 100px;
+          vertical-align: top;
+      }
+      
+      .label1 {
+          display: inline-block;
+          max-width: 100%;
+          margin-bottom: 5px;
+          font-weight: 700;
+          width: 70px;
+          vertical-align: top;
+          color: #333;
       }
