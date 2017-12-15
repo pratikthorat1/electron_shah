@@ -152,7 +152,7 @@ function calculateAge() {
     day_age = day_age % 30;
 
     if (isNaN(year_age) || isNaN(month_age) || isNaN(day_age)) {
-        $("#exact_age").value("Invalid birthday - Please try again!");
+        $("#exact_age").val("Invalid birthday - Please try again!");
     } else {
         $("#exact_age").val(year_age + " years " + month_age + " months " + day_age + " days");
     }
