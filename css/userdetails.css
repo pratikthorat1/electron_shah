@@ -68,3 +68,16 @@ th {
     width: 100%;
     margin: auto;
 }
+
+.modal-dialog {
+    width: 320px!important;
+}
+
+input {
+    margin-bottom: 5px!important;
+}
+
+label {
+    width: 100px;
+    vertical-align: top;
+}

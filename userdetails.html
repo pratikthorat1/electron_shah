@@ -60,7 +60,6 @@
 
         <div class="tab-content clearfix">
             <div class="tab-pane active" id="pot">
-                <h3>All persons:</h3>
                 <table class="u-full-width">
                     <thead>
                         <tr>
@@ -87,7 +86,6 @@
                 </table>
             </div>
             <div class="tab-pane" id="mgt">
-                <h3>All persons:</h3>
                 <table class="u-full-width">
                     <thead>
                         <tr>
@@ -119,19 +117,19 @@
                     <div class="col-md-4 photo">
 
                         <input id="input1" type="file" onchange="previewFile(1);" accept="image/*" />
-                        <input id="imgbtn1" type="button" value="Upload">
+                        <input id="imgbtn1" type="button" onClick="uploadImg(1);" value="Upload">
                         <img id="img1" src="img/user.png">
 
                     </div>
                     <div class="col-md-4 photo">
                         <input id="input2" type="file" onchange="previewFile(2);" accept="image/*" />
-                        <input id="imgbtn2" type="button" value="Upload">
+                        <input id="imgbtn2" type="button" onClick="uploadImg(1);" value="Upload">
                         <img id="img2" src="img/user.png">
 
                     </div>
                     <div class="col-md-4 photo">
                         <input id="input3" type="file" onchange="previewFile(3);" accept="image/*" />
-                        <input id="imgbtn3" type="button" value="Upload">
+                        <input id="imgbtn3" type="button" onClick="uploadImg(1);" value="Upload">
                         <img id="img3" src="img/user.png">
 
                     </div>
@@ -142,22 +140,88 @@
             </div>
         </div>
     </div>
-    <!-- Modal -->
+    <!-- progress Modal -->
     <div id="myModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
 
             <!-- Modal content-->
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Modal Header</h4>
-                </div>
                 <div class="modal-body">
-                    <p>Some text in the modal.</p>
-                    <input type="text" id="id">
+                    <label>Date</label>
+                    <input type="text" id="date"><br>
+                    <label>weight</label>
+                    <input type="text" id="weight"><br>
+                    <label>Food Packets</label>
+                    <input type="text" id="fp"><br>
+                    <label>Receipe Type 1</label>
+                    <input type="text" id="r1"><br>
+                    <label>Receipe Type 2</label>
+                    <input type="text" id="r2"><br>
+                    <label>Receipe Type 3</label>
+                    <input type="text" id="r3"><br>
+                    <label>Receipe Type 4</label>
+                    <input type="text" id="r4"><br>
+                    <label>Remarks</label>
+                    <textarea name="description" rows="10" cols="20" id="remarks"></textarea>
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" onClick="addProgress();" id="addButton" name="description">Save</button>
+                    <button type="button" onClick="saveProgress();" id="saveButton" name="description">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- measurement modal -->
+    <div id="measurement" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <label>Date</label>
+                    <input type="text" id="mgt_date"><br>
+                    <label>height</label>
+                    <input type="text" id="mgt_height"><br>
+                    <label>weight</label>
+                    <input type="text" id="mgt_weight"><br>
+                    <label>Neck</label>
+                    <input type="text" id="mgt_neck"><br>
+                    <label>Shoulder</label>
+                    <input type="text" id="mgt_shoulder"><br>
+                    <label>Midarm</label>
+                    <input type="text" id="mgt_midarm"><br>
+                    <label>Chest</label>
+                    <input type="text" id="mgt_chest"><br>
+                    <label>waist</label>
+                    <input type="text" id="mgt_waist"><br>
+                    <label>Hips</label>
+                    <input type="text" id="mgt_hips"><br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" onClick="addMeasurement();" id="mgt_addButton" name="description">Save</button>
+                    <button type="button" onClick="saveMeasurement();" id="mgt_saveButton" name="description">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!--- delete modal -->
+    <div id="deleteModal" class="modal fade" role="dialog">
+        <div class="modal-dialog label-danger">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>Are you sure you want to delete?</p>
+                </div>
+                <div class="modal-footer" id="deletefooter">
+                    <!-- <button type="button" id="deleteButton" name="description">Delete</button> -->
+                    <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button> -->
                 </div>
             </div>
 
