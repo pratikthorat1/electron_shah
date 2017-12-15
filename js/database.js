@@ -134,3 +134,50 @@ exports.getPersonsMeasurement = function(id, fnc) {
         fnc(rows);
     });
 }
+
+
+//get each members unique no database from profile
+exports.getNewMemberid = function(fnc) {
+    var month;
+    let pass;
+    var stringarr = [];
+    var today = new Date();
+
+    db.get("SELECT max(substr(memberno,3,2)) as mon from user_profile", [], function(err, row) {
+        if (err) {
+            month = "0";
+            return console.error(err.message);
+        }
+        month = row.mon;
+    });
+
+
+    db.get("SELECT max(substr(memberno,8,3)) as num from user_profile", [], function(err, row) {
+        if (err) {
+            var code1 = 0;
+            return console.error(err.message);
+        }
+        console.log(today.getMonth() + 1);
+        if (month == (today.getMonth() + 1)) {
+            code1 = row.num;
+
+        } else { var code1 = 0; }
+
+        stringarr[0] = (today.getMonth() + 1).toString();
+        stringarr[1] = today.getFullYear().toString().substr(-2);
+        stringarr[2] = code1;
+        console.log(stringarr);
+        fnc(stringarr);
+    });
+
+
+}
+
+exports.getbirthdayList = function(dt1, dt2, fnc) {
+    db.all("SELECT up.person_nm,up.person_birthday,up.person_cont1,up.person_email,it.img1 FROM user_profile up,images_table it WHERE DATE(substr(person_birthday,4,2)||substr(person_birthday,1,2)) between DATE(?) and DATE(?) and up.memberno=it.memberno group by up.memberno", dt1, dt2, function(err, rows) {
+        if (err) {
+            return console.error(err.message);
+        }
+        fnc(rows);
+    });
+}
