@@ -10,7 +10,7 @@ window.onload = function() {
     //  var result = captured ? captured : 'myDefaultValue';
 
     userid = location.search.split('user=')[1];
-    console.log(userid);
+    console.log(userid.substr(0, 1));
 
 
     console.log('age: ' + getAge("05-01-1991"));
@@ -128,7 +128,7 @@ function populateProgressTable(id) {
             tableBody += '  <td>' + persons[i].total_wlose + '</td>';
             tableBody += '  <td>' + persons[i].BMI + '</td>';
             tableBody += '  <td width="300px";>' + persons[i].remark + '</td>';
-            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonProgress(\'' + persons[i].memberno + '\')" "></i>'
+            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i>'
             tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i></td>'
                 //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
                 //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
@@ -144,7 +144,6 @@ function populateProgressTable(id) {
 
 // Deletes a person
 function deletePersonProgress(id, dt) {
-    console.log(id, dt);
     var x = confirm("Are you sure you want to delete?");
     if (x) {
         // Delete the person from the database
@@ -164,18 +163,55 @@ function tablecreate() {
     database.createtable();
 }
 
-function updatePersonProgress(id) {
+function addPersonProgress() {
     //update single user in table
     $("#myModal").modal('show');
-    var firstname = document.getElementById('id');
+    document.getElementById('saveButton').style.visibility = 'hidden';
+}
 
-    database.singlePerson(id, function(persons) {
-        // console.log(persons);
-        firstname.value = persons.person_nm;
+function saveProgress() {
+    var date = document.getElementById('date');
+    var weight = document.getElementById('weight').value.toString();
+    var fp = document.getElementById('fp').value.toString();
+    var r1 = document.getElementById('r1').value.toString();
+    var r2 = document.getElementById('r2').value.toString();
+    var r3 = document.getElementById('r3').value.toString();
+    var r4 = document.getElementById('r4').value.toString();
+    var remarks = document.getElementById('remarks').value.toString();
+    database.singlePerson(sql, id, dt, function(persons) {
+        console.log(persons);
+    });
+}
+
+function updatePersonProgress(id, dt) {
+    //update single user in table
+
+    document.getElementById('addButton').style.visibility = 'hidden';
+    var date = document.getElementById('date');
+    var weight = document.getElementById('weight');
+    var fp = document.getElementById('fp');
+    var r1 = document.getElementById('r1');
+    var r2 = document.getElementById('r2');
+    var r3 = document.getElementById('r3');
+    var r4 = document.getElementById('r4');
+    var remarks = document.getElementById('remarks');
+    var sql = `select * from progress_table where memberno=? and prog_date=?`;
+    database.singlePerson(sql, id, dt, function(persons) {
+        console.log(persons);
+        date.value = persons.prog_date;
+        weight.value = persons.prog_weight;
+        fp.value = persons.foodpkt;
+        r1.value = persons.recip1;
+        r2.value = persons.recip2;
+        r3.value = persons.recip3;
+        r4.value = persons.recip4;
+        remarks.value = persons.remark;
 
     });
-
+    $("#myModal").modal('show');
 }
+
+
 
 function populateMeasurementTable(id) {
 
@@ -204,8 +240,8 @@ function populateMeasurementTable(id) {
             tableBody += '  <td>' + persons[i].weight_diff + '</td>';
             tableBody += '  <td>' + persons[i].total_weight_diff + '</td>';
             tableBody += '  <td>' + persons[i].BMI + '</td>';
-            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonMeasurement(\'' + persons[i].memberno + '\')" "></i>'
-            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i></td>'
+            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].mgt_date + '\')" "></i>'
+            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].mgt_date + '\')" "></i></td>'
                 //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
                 //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
             tableBody += '</tr>';
@@ -218,17 +254,34 @@ function populateMeasurementTable(id) {
 }
 
 //update persons Measurement
-function updatePersonMeasurement(id) {
+function updatePersonMeasurement(id, dt) {
     //update single user in table
-    $("#myModal").modal('show');
-    var firstname = document.getElementById('id');
 
-    database.singlePerson(id, function(persons) {
-        // console.log(persons);
-        firstname.value = persons.person_nm;
+    document.getElementById('mgt_addButton').style.visibility = 'hidden';
+    var date = document.getElementById('mgt_date');
+    var weight = document.getElementById('mgt_weight');
+    var height = document.getElementById('mgt_height');
+    var neck = document.getElementById('mgt_neck');
+    var shoulder = document.getElementById('mgt_shoulder');
+    var midarm = document.getElementById('mgt_midarm');
+    var chest = document.getElementById('mgt_chest');
+    var waist = document.getElementById('mgt_waist');
+    var hips = document.getElementById('mgt_hips');
+    var sql = `select * from measurement_table where memberno=? and mgt_date=?`;
+    database.singlePerson(sql, id, dt, function(persons) {
+        console.log(persons);
+        date.value = persons.mgt_date;
+        weight.value = persons.mgt_weight;
+        height.value = persons.mgt_height;
+        neck.value = persons.mgt_neck;
+        shoulder.value = persons.mgt_sholder;
+        midarm.value = persons.mgt_midarm;
+        chest.value = persons.mgt_chest;
+        waist.value = persons.mgt_waist;
+        hips.value = persons.mgt_hips;
 
     });
-
+    $("#measurement").modal('show');
 }
 //get photos from database for this user
 function populateImagesTable(id) {

@@ -112,14 +112,14 @@ exports.updatePerson = function(sql, stringarray) {
     });
 }
 
-exports.singlePerson = function(sql, fct) {
-        //   let sql = `SELECT *
+exports.singlePerson = function(sql, id, id1, fct) {
+        //  let sql = `SELECT *
         // FROM user_profile
         // WHERE memberno  = ?`;
         // let accid = id;
 
         // first row only
-        db.get(sql, (err, row) => {
+        db.get(sql, id, id1, (err, row) => {
             if (err) {
                 return console.error(err.message);
             }
