@@ -81,6 +81,13 @@ exports.getPersonsProgress = function(id, fnc) {
     });
 }
 
+//get each members database from progress table
+exports.getPersonsImages = function(id, fnc) {
+
+    db.get("SELECT * from images_table where memberno=?", id, function(err, rows) {
+        fnc(rows);
+    });
+}
 
 
 // Deletes a person
