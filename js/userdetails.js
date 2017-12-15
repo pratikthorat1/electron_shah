@@ -11,6 +11,11 @@ window.onload = function() {
 
     userid = location.search.split('user=')[1];
     console.log(userid);
+
+
+    console.log('age: ' + getAge("05-01-1991"));
+    console.log('height in feet' + getHeightincm(4, 10));
+    console.log('BMI cal - ' + getBMI(getHeightincm(5, 10), 80));
     // Populate the table
     populateProgressTable(userid);
     populateMeasurementTable(userid);
@@ -283,20 +288,84 @@ function previewFile(id) {
         image.src = _URL.createObjectURL(file);
     }
 
-    function uploadimages(userid, id) {
-
-        var imgid = document.getElementById('img' + id);
-        var lastname = document.getElementById('lastname');
-
-        var sql = `Update image_table set name=? where accountno=?`;
-
-        var stringarr = [];
-        stringarr[0] = document.getElementById('firstname').value;
-        stringarr[1] = ocument.getElementById('lastname').value;
-        // stringarr[2]=lastname.value;
-        // Save the person in the database
-        database.updatePerson(sql, stringarr);
 
 
+
+}
+
+function uploadimages(userid, id) {
+
+    var imgid = document.getElementById('img' + id);
+    var lastname = document.getElementById('lastname');
+
+    var sql = `Update image_table set name=? where accountno=?`;
+
+    var stringarr = [];
+    stringarr[0] = document.getElementById('firstname').value;
+    stringarr[1] = ocument.getElementById('lastname').value;
+    // stringarr[2]=lastname.value;
+    // Save the person in the database
+    database.updatePerson(sql, stringarr);
+
+
+}
+
+function getAge(dateString) {
+    var today = new Date();
+    //console.log(today.toString());
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    var d = today.getDate() - birthDate.getDate();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age + "-Years " + m + "-Months " + d + "-Days";
+
+
+}
+
+function calculateAge() {
+    var mdate = $("#birth_date").val().toString();
+    var yearThen = parseInt(mdate.substring(0, 4), 10);
+    var monthThen = parseInt(mdate.substring(5, 7), 10);
+    var dayThen = parseInt(mdate.substring(8, 10), 10);
+
+    var today = new Date();
+    var birthday = new Date(yearThen, monthThen - 1, dayThen);
+
+    var differenceInMilisecond = today.valueOf() - birthday.valueOf();
+
+    var year_age = Math.floor(differenceInMilisecond / 31536000000);
+    var day_age = Math.floor((differenceInMilisecond % 31536000000) / 86400000);
+
+    if ((today.getMonth() == birthday.getMonth()) && (today.getDate() == birthday.getDate())) {
+        alert("Happy B'day!!!");
+    }
+
+    var month_age = Math.floor(day_age / 30);
+
+    day_age = day_age % 30;
+
+    if (isNaN(year_age) || isNaN(month_age) || isNaN(day_age)) {
+        $("#exact_age").text("Invalid birthday - Please try again!");
+    } else {
+        $("#exact_age").html("You are<br/><span id=\"age\">" + year_age + " years " + month_age + " months " + day_age + " days</span> old");
+    }
+}
+
+function getHeightincm(ft, inch) {
+    var feettocm = ft / 0.032808;
+    var inchtocm = inch / 0.39370;
+    var heightincm = Math.round(feettocm + inchtocm)
+    return heightincm;
+
+}
+
+function getBMI(ht, wt) {
+    if (wt > 0 && ht > 0) {
+        var finalBmi = wt / (ht / 100 * ht / 100);
+        var fBMI = Math.round(finalBmi * 10) / 10;
+        return fBMI;
     }
 }
