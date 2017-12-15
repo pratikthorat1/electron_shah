@@ -33,9 +33,9 @@
         <div class="row" id="users">
         </div>
     </div>
-    <a href="#" class="mybirth" data-toggle="modal" data-target="#mybirth">
+    <a class="mybirth" id="birthbtn" onclick="openModal();">
         <i class="fa fa-gift" aria-hidden="true"></i>
-        <span class="badge">1
+        <span class="badge" id="birthdaycount">0
             </span>
     </a>
 
@@ -47,10 +47,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Add New User</h2>
+                    <h2 class="modal-title">birthday List</h2>
                 </div>
                 <div class="modal-body form">
-
+                    <table>
+                        <tbody id="tablebirthday">
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -69,7 +72,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">Add New User</h2>
+                    <h2 class="modal-title">Add New Person Details</h2>
                 </div>
                 <div class="modal-body form">
                     <div class="row">
@@ -83,19 +86,19 @@
                             <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
                         </div>
                         <div class="col-md-8">
-                            <label>Member Id:</label><input type="text" id="memberno" value="G-1217-001" readonly><br>
+                            <label>Member Id:</label><input type="text" id="member_id" value="G-1217-001" readonly><br>
                             <label>Name:</label><input type="text" id="name"><br>
-                            <label>Reference:</label><input type="text" id="reference"><br>
-                            <label>Mobile:</label><input type="text" id="memberno">
+                            <label>Reference:</label><input type="text" id="ref"><br>
+                            <label>Mobile:</label><input type="text" id="cont_no">
                         </div>
                     </div><br>
                     <div class="row">
                         <div class="col-md-6">
-                            <label>Alternate No:</label><input type="text" id="memberno">
+                            <label>Alternate No:</label><input type="text" id="alt_no">
                             <label>Address:</label><textarea name="address" id="address" cols="29" rows="10"></textarea>
-                            <label>Height:</label><input type="text" id="memberno">
-                            <label>Weight:</label><input type="text" id="memberno">
-                            <label>Target Weight:</label><input type="text" id="memberno" value="65 Kgs" readonly>
+                            <label>Height:</label><input type="text" id="height">
+                            <label>Weight:</label><input type="text" id="weight">
+                            <label>Target Weight:</label><input type="text" id="target_weight" value="65 Kgs" readonly>
                         </div>
                         <div class="col-md-6">
                             <label>Email:</label>
@@ -114,21 +117,15 @@
                             <input type="radio" name="married" value="married">
                             <span class="label1">Married</span>
                             </input>
-                            <label>Birthday:</label><input type="date" id="memberno">
-                            <label>Age:</label><input type="text" id="memberno" value="30 Years 2 Months and 21 Days" readonly>
-                            <label>Current BMI:</label><input type="text" id="memberno" value="34.3" readonly>
-                            <label>Target BMI:</label><input type="text" id="memberno" value="21.5" readonly>
+                            <label>Birthday:</label><input type="date" id="birth_date" onchange="calculateAge();">
+                            <label>Age:</label><input type="text" id="exact_age" value="30 Years 2 Months and 21 Days" readonly>
+                            <label>Current BMI:</label><input type="text" id="current_bmi" value="34.3" readonly>
+                            <label>Target BMI:</label><input type="text" id="target_bmi" value="21.5" readonly>
                         </div>
                     </div>
-
-
-
-
-
-
-
                 </div>
                 <div class="modal-footer">
+                    <button type="button" class="btn btn-default" Onclick="Submit();">Submit</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                 </div>
             </div>
