@@ -7,8 +7,15 @@ var db = new sqlite3.Database('./dbfinal.db');
 
 var stringarray = [];
 
-exports.createtable = function() {
+exports.createtable = function(err) {
+    if (err) {
+        alert("error at create table" + err.message);
+    }
     db.run("create table if not exists customers (user_info)");
+    db.run("CREATE TABLE if not exists images_table ( `memberno` TEXT NOT NULL, `img1` BLOB DEFAULT null, `img2` BLOB DEFAULT null, `img3` BLOB DEFAULT null, `img4` BLOB DEFAULT null, `img5` BLOB DEFAULT null )");
+    db.run("CREATE TABLE `measurement_table` ( `memberno` TEXT NOT NULL, `mgt_date` TEXT, `mgt_height` NUMERIC, `mgt_weight` NUMERIC, `mgt_neck` NUMERIC, `mgt_sholder` NUMERIC, `mgt_midarm` NUMERIC, `mgt_chest` NUMERIC, `mgt_waist` NUMERIC, `mgt_hips` NUMERIC, `mgt_wbyh` NUMERIC, `total_inch` NUMERIC, `inch_diff` NUMERIC, `total_inch_diff` NUMERIC, `weight_diff` NUMERIC, `total_weight_diff` NUMERIC, `BMI` NUMERIC )");
+    db.run("CREATE TABLE 'progress_table' ( `memberno` TEXT NOT NULL, `prog_date` TEXT, `prog_weight` NUMERIC, `foodpkt` NUMERIC, `recip1` NUMERIC, `recip2` NUMERIC, `recip3` NUMERIC, `recip4` NUMERIC, `total_recip` NUMERIC, `prog_food` NUMERIC, `total_food` NUMERIC, `month` NUMERIC, `weight_lose` NUMERIC, `total_wlose` NUMERIC, `BMI` NUMERIC, `remark` TEXT )");
+    db.run("CREATE TABLE 'user_profile' ( `memberno` TEXT NOT NULL, `reg_date` TEXT, `person_nm` TEXT, `person_add` TEXT, `person_ref` TEXT, `person_cont1` INTEGER, `person_cont2` INTEGER, `person_email` TEXT, `person_gender` INTEGER, `person_mr_states` INTEGER, `person_birthday` TEXT, `person_height` NUMERIC, `person_weight` NUMERIC, `BMI` NUMERIC )");
     alert("tabel created");
 }
 
@@ -174,10 +181,45 @@ exports.getNewMemberid = function(fnc) {
 }
 
 exports.getbirthdayList = function(dt1, dt2, fnc) {
-    db.all("SELECT up.person_nm,up.person_birthday,up.person_cont1,up.person_email,it.img1 FROM user_profile up,images_table it WHERE DATE(substr(person_birthday,4,2)||substr(person_birthday,1,2)) between DATE(?) and DATE(?) and up.memberno=it.memberno group by up.memberno", dt1, dt2, function(err, rows) {
+    db.all("SELECT up.person_nm,up.person_birthday,up.person_cont1,up.person_email,it.img1 FROM user_profile up,images_table it WHERE DATE(substr(person_birthday,4,2)||substr(person_birthday,1,2)) between DATE(?) and DATE(?) and up.memberno=it.memberno group by up.memberno order by person_birthday asc", dt1, dt2, function(err, rows) {
         if (err) {
             return console.error(err.message);
         }
         fnc(rows);
+    });
+}
+
+exports.getallrowsbyname = function(name, fna) {
+
+    // db.all("select up.memberno as memberno,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it", function(err, rows) {
+    //     fnc(rows);
+    // });
+    var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it where up.person_nm like ? group by up.memberno`;
+
+    db.all(sql, name, (err, rows) => {
+        if (err) {
+            throw err;
+        }
+        console.log("get name by person:=" + rows);
+        fna(rows);
+    });
+
+}
+
+exports.insertpersondetails = function(persondetails, imagedetails) {
+    var sql = `insert into user_profile values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`;
+    db.run(sql, persondetails, function(err) {
+        if (err) {
+            return console.log(err.message);
+        }
+        console.log("Data inserted");
+    });
+
+    var sql1 = `insert into images_table values (?,?,?,?,?,?)`;
+    db.run(sql1, imagedetails, function(err) {
+        if (err) {
+            return console.log(err.message);
+        }
+        console.log("image inserted");
     });
 }

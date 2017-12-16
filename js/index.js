@@ -13,8 +13,8 @@ window.onload = function() {
     });
 
     $("#search").change(function() {
-        var i = document.getElementById('search').value.toString();
-        console.log(i);
+
+        populateTableByName();
     });
 
     $("#imageUpload").change(function() {
@@ -76,7 +76,7 @@ window.onload = function() {
 
         // Retrieve the persons
         database.getallrows(function(persons) {
-            console.log(persons);
+            //console.log(persons);
             // Generate the table body
             var tableBody = '';
             for (i = 0; i < persons.length; i++) {
@@ -127,7 +127,7 @@ function fasterPreview(uploader) {
 //getMemberid from table 
 function getMemberid() {
     database.getNewMemberid(function(id) {
-        console.log(id[0] + "-" + id[1] + "-" + id[2]);
+        // console.log(id[0] + "-" + id[1] + "-" + id[2]);
     })
 }
 
@@ -159,6 +159,7 @@ function calculateAge() {
     } else {
         $("#exact_age").val(year_age + " years " + month_age + " months " + day_age + " days");
     }
+
 }
 
 
@@ -169,14 +170,14 @@ function addDays(theDate, days) {
 function getBirthdays() {
     var today = new Date();
     var todaymonth = today.getMonth() + 1;
-    var todaydate = today.getDate() - 1;
+    var todaydate = today.getDate();
     var dt1 = todaymonth + "" + todaydate;
     var weekdate = addDays(today, 7);
     var nextmonth = weekdate.getMonth() + 1;
     var nextdate = weekdate.getDate();
     var dt2 = nextmonth + "" + nextdate;
 
-    console.log(dt1 + " " + dt2);
+    // console.log(dt1 + " " + dt2);
     database.getbirthdayList(dt1, dt2, function(persons) {
 
         document.getElementById('birthdaycount').innerText = persons.length;
@@ -212,6 +213,113 @@ function getBirthdays() {
 function openModal() {
 
     $("#mybirth").modal('show');
+
+
+}
+
+// // Populates the persons table
+function populateTableByName() {
+    var name = document.getElementById('search').value.toString();
+    console.log("person you serach is " + name);
+    database.getallrowsbyname(name, function(persons) {
+        Console.log(persons);
+        // Generate the table body
+        var tableBody = '';
+        for (i = 0; i < persons.length; i++) {
+            var data = persons[i].img;
+
+            // Convert the string to bytes
+            var bytes = new Uint8Array(data.length / 2);
+
+            for (var j = 0; j < data.length; j += 2) {
+                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            }
+
+            // Make a Blob from the bytes
+            var blob = new Blob([bytes], { type: 'image/bmp' });
+
+            // Use createObjectURL to make a URL for the blob
+            tableBody += '<div class = "col-md-4" ><a href = "userdetails.html?user=' + persons[i].num + '" >';
+            tableBody += '<div class="team-container">';
+            tableBody += '<img id="check" class="profile" src="' + URL.createObjectURL(blob) + '"> <h1>' + persons[i].name + '</h1>';
+            tableBody += ' <h3>Last Visit:' + persons[i].last + '</h3>';
+            tableBody += '<hr></hr>';
+            tableBody += '<div class="col-md-4 weight red"><h3>' + persons[i].iweight + 'kg</h3><h4>Initial</h4></div><div class="col-md-4 weight blue"><h2>' + persons[i].cweight + 'kg<sup> <i class="fa fa-chevron-down" aria-hidden="true"></i></sup></h2><h4>Current</h4></div><div class = "col-md-4 weight green"><h3>' + persons[i].tweight + 'kg</h3><h4>target</h4></div></div></a></div>';
+        }
+
+        // Fill the table content
+        document.getElementById('users').innerHTML = tableBody;
+    });
+}
+
+function getHeightincm(ft, inch) {
+    var feettocm = ft / 0.032808;
+    var inchtocm = inch / 0.39370;
+    var heightincm = Math.round(feettocm + inchtocm)
+    return heightincm;
+}
+
+function getBMI() {
+    var ht1 = $("#height_feet").val().toString();
+    var ht2 = $("#height_inch").val().toString();
+    var wt = $("#weight_kg").val().toString();
+
+    var ht = getHeightincm(ht1, ht2);
+
+    if (wt > 0 && ht > 0) {
+
+        var finalBmi = wt / (ht / 100 * ht / 100);
+        var fBMI = Math.round(finalBmi * 10) / 10;
+        $("#current_bmi").val(fBMI);
+        return fBMI;
+    }
+}
+
+function savePerson() {
+    var memberno = $("#member_id").val().toString();
+    var regdate = new Date();
+    var name = $("#name").val().toString();
+    var ref = $("#ref").val().toString();
+    var cont_no = $("#cont_no").val().toString();
+    var email = $("#email").val().toString();
+    var selectedgender = "";
+    var selected = $("input[type='radio'][name='gender']:checked");
+    if (selected.length > 0) {
+        selectedgender = selected.val();
+    }
+    var selectedmr = "";
+    var selected = $("input[type='radio'][name='married']:checked");
+    if (selected.length > 0) {
+        selectedmr = selected.val();
+    }
+    var birth_date = $("#birth_date").val().toString();
+    var heightincm = getHeightincm($("#height_feet").val().toString(), $("#height_inch").val().toString());
+    var weight_kg = $("#weight_kg").val().toString();
+    var current_bmi = $("#current_bmi").val().toString();
+
+    var personaldetails = [];
+    var imagedetails = [];
+    var chk = 1;
+    var chk1 = current_bmi;
+    var chk2 = current_bmi;
+    personaldetails = [memberno, chk, name, ref, cont_no, email, selectedgender, selectedmr, birth_date, heightincm, weight_kg, current_bmi, chk1, chk2];
+    // personaldetails = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+
+    var img = document.getElementById("profileImage");
+    var imgdata;
+    blobUtil.imgSrcToBlob(img.src).then(function(blob) {
+        imgdata = blob;
+        console.log(imgdata.img);
+        var blobURL = blobUtil.createObjectURL(blob);
+
+        var newImg = document.createElement('img');
+        newImg.src = blobURL;
+        console.log(blobURL);
+        imagedetails = [memberno, imgdata, imgdata, imgdata, imgdata, imgdata];
+        //database.insertpersondetails(personaldetails, imagedetails);
+    });
+
+
 
 
 }
