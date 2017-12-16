@@ -22,7 +22,7 @@
         <div class="container-fluid">
 
             <form class="">
-                <input id="school" name="schoo" type="text" placeholder="Type a name to search..">
+                <input id="search" name="schoo" type="text" placeholder="Type a name to search..">
             </form>
         </div>
     </nav>
@@ -47,13 +47,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h2 class="modal-title">birthday List</h2>
+                    <h2 class="modal-title">Upcoming Birthdays</h2>
                 </div>
-                <div class="modal-body form">
-                    <table>
-                        <tbody id="tablebirthday">
-                        </tbody>
-                    </table>
+                <div class="modal-body " id="tablebirthday">
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -83,7 +80,7 @@
                                     <div class="text"><i class="fa fa-upload" aria-hidden="true"></i>Upload</div>
                                 </div>
                             </div>
-                            <input id="imageUpload" type="file" name="profile_photo" placeholder="Photo" required="" capture>
+                            <input id="imageUpload" type="file" accept="image/*" name="profile_photo" capture>
                         </div>
                         <div class="col-md-8">
                             <label>Member Id:</label><input type="text" id="member_id" value="G-1217-001" readonly><br>
@@ -96,9 +93,9 @@
                         <div class="col-md-6">
                             <label>Alternate No:</label><input type="text" id="alt_no">
                             <label>Address:</label><textarea name="address" id="address" cols="29" rows="10"></textarea>
-                            <label>Height:</label><input type="text" id="height">
+                            <label>Height:</label><input type="text" id="height_feet"><input type="text" id="height_inch">
                             <label>Weight:</label><input type="text" id="weight">
-                            <label>Target Weight:</label><input type="text" id="target_weight" value="65 Kgs" readonly>
+                            <label>Target Wt:</label><input type="text" id="target_weight" value="65 Kgs" readonly>
                         </div>
                         <div class="col-md-6">
                             <label>Email:</label>

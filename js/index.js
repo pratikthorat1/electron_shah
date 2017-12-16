@@ -12,7 +12,10 @@ window.onload = function() {
         $("#imageUpload").click();
     });
 
-
+    $("#search").change(function() {
+        var i = document.getElementById('search').value.toString();
+        console.log(i);
+    });
 
     $("#imageUpload").change(function() {
         fasterPreview(this);
@@ -193,12 +196,12 @@ function getBirthdays() {
             var blob = new Blob([bytes], { type: 'image/bmp' });
 
             // Use createObjectURL to make a URL for the blob
-            tableBody += '<div class = "col-md-4" ><a href = "userdetails.html?user=' + persons[i].person_nm + '" >';
-            tableBody += '<div class="team-container">';
-            tableBody += '<img id="check" class="profile" src="' + URL.createObjectURL(blob) + '"> <h1>' + persons[i].person_birthday + '</h1>';
-            tableBody += ' <h3>Last Visit:' + persons[i].person_cont1 + '</h3>';
-            tableBody += '<hr></hr>';
-            tableBody += '<div class="col-md-4 weight red"><h3>' + persons[i].person_nm + 'kg</h3><h4>Initial</h4></div><div class="col-md-4 weight blue"><h2>' + persons[i].cweight + 'kg<sup> <i class="fa fa-chevron-down" aria-hidden="true"></i></sup></h2><h4>Current</h4></div><div class = "col-md-4 weight green"><h3>' + persons[i].tweight + 'kg</h3><h4>target</h4></div></div></a></div>';
+            tableBody += '<div class = "col-md-12" ><a href = "userdetails.html?user=' + persons[i].person_nm + '" >';
+            tableBody += '<div class="b_team-container">';
+            tableBody += '<img id="b_img" class="b_profile" src="' + URL.createObjectURL(blob) + '"> <div class="b_user-details"><label>Name:</label>' + persons[i].person_nm;
+            tableBody += '<br> <label>Mobile:</label>' + persons[i].person_cont1 + '<br>';
+            tableBody += '<label>Email:</label>' + persons[i].person_email + '<br>';
+            tableBody += '<label>Birthdate:</label>' + persons[i].person_birthday + '</div></div></a></div>';
         }
 
         // Fill the table content

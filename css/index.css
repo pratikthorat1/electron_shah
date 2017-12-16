@@ -32,6 +32,7 @@
           -webkit-box-shadow: 0 0 10px #aaa;
           -o-box-shadow: 0 0 10px #aaa;
           padding: 20px 10px;
+          margin-bottom: 30px;
           height: 300px;
           text-align: center;
           background: #fff;
@@ -286,6 +287,14 @@
           vertical-align: top;
       }
       
+      #mybirth .modal-dialog {
+          width: 500px;
+      }
+      
+      #tablebirthday {
+          height: 70%;
+      }
+      
       .label1 {
           display: inline-block;
           max-width: 100%;
@@ -294,4 +303,37 @@
           width: 70px;
           vertical-align: top;
           color: #333;
+      }
+      
+      .b_profile {
+          width: 100px;
+          height: 100px;
+          float: left;
+          margin-left: 10px;
+          margin-right: 10px;
+          border-radius: 50%;
+      }
+      
+      .b_user-details {}
+      
+      .b_team-container {
+          box-shadow: 0 0 10px #aaa;
+          -moz-box-shadow: 0 0 10px #aaa;
+          -webkit-box-shadow: 0 0 10px #aaa;
+          -o-box-shadow: 0 0 10px #aaa;
+          padding: 5px 0px;
+          margin-bottom: 10px;
+          height: 110px;
+          background: #fff;
+      }
+      
+      input[type=date] {
+          border: 1px solid #D1D1D1;
+          border-radius: 4px;
+      }
+      
+      #height_feet,
+      #height_inch {
+          width: 28%!important;
+          margin-right: 10px
       }
