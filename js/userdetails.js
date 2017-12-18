@@ -1,4 +1,9 @@
 const database = require('./js/database');
+var assert = require('assert');
+var fs = require('fs');
+var path = require('path');
+var base64Img = require('./node_modules/base64-img');
+
 
 var userid;
 const reader = new FileReader();
@@ -377,49 +382,45 @@ function populateImagesTable(id) {
     database.getPersonsImages(id, function(persons) {
 
 
-        if ((persons.img2) != null && (persons.img4) != "") {
+        if ((persons.img2) != null && (persons.img2) != "") {
             var data = persons.img2;
 
-            var bytes = new Uint8Array(data.length / 2);
-            for (var j = 0; j < data.length; j += 2) {
-                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            }
-            // Make a Blob from the bytes
-            var blob = new Blob([bytes], { type: 'image/bmp' });
+            // var bytes = new Uint8Array(data.length / 2);
+            // for (var j = 0; j < data.length; j += 2) {
+            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            // }
+            // // Make a Blob from the bytes
+            // var blob = new Blob([bytes], { type: 'image/bmp' });
 
-            document.getElementById('img1').src = URL.createObjectURL(blob);
-            //const blb = new Blob([document.getElementById('img1').src], { type: "text/plain" });
-            const blb = new Blob([document.getElementById('img1').src], { type: "Image/png" });
-            reader.readAsText(blb);
-            //reader.readAsDataURL(blb);
+            document.getElementById('img1').src = ("data:image/png;base64," + data); //URL.createObjectURL(blob);
 
         } else {
             document.getElementById('img1').src = "img/user.png";
-            var bb = new blob()
+            //var bb = new blob()
         }
-        if ((persons.img3) != null && (persons.img4) != "") {
+        if ((persons.img3) != null && (persons.img3) != "") {
             var data = persons.img3;
-            var bytes = new Uint8Array(data.length / 2);
-            for (var j = 0; j < data.length; j += 2) {
-                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            }
-            // Make a Blob from the bytes
-            var blob = new Blob([bytes], { type: 'image/bmp' });
+            // var bytes = new Uint8Array(data.length / 2);
+            // for (var j = 0; j < data.length; j += 2) {
+            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            // }
+            // // Make a Blob from the bytes
+            // var blob = new Blob([bytes], { type: 'image/bmp' });
 
-            document.getElementById('img2').src = URL.createObjectURL(blob);;
+            document.getElementById('img2').src = ("data:image/png;base64," + data); //URL.createObjectURL(data);
         } else {
             document.getElementById('img2').src = "img/user.png";
         }
         if ((persons.img4) != null && (persons.img4) != "") {
             var data = persons.img4;
-            var bytes = new Uint8Array(data.length / 2);
-            for (var j = 0; j < data.length; j += 2) {
-                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            }
-            // Make a Blob from the bytes
-            var blob = new Blob([bytes], { type: 'image/bmp' });
+            // var bytes = new Uint8Array(data.length / 2);
+            // for (var j = 0; j < data.length; j += 2) {
+            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            // }
+            // // Make a Blob from the bytes
+            // var blob = new Blob([bytes], { type: 'image/bmp' });
 
-            document.getElementById('img3').src = URL.createObjectURL(blob);
+            document.getElementById('img3').src = ("data:image/png;base64," + data); // URL.createObjectURL(blob);
         } else {
             document.getElementById('img3').src = "img/user.png";
         }
@@ -427,6 +428,7 @@ function populateImagesTable(id) {
     });
 }
 
+var profileImage;
 //upload image to the photos page with three diffrent images
 function previewFile(id) {
     var _URL = window.URL || window.webkitURL;
@@ -434,7 +436,12 @@ function previewFile(id) {
     var image = document.getElementById('img' + id);
     if ((file = $("#input" + id)[0].files[0])) {
 
-        image.src = _URL.createObjectURL(file);
+        image.src = file.path; // ("data:image/png;base64," + data);
+        // profileImage = {
+        //     img: fs.readFileSync(file.path, encoding || 'base64')
+        // };
+        // // console.log("file path=" + file.path);
+        // console.log("base 64=" + profileImage.img);
     }
 
 
@@ -516,5 +523,82 @@ function getBMI(ht, wt) {
         var finalBmi = wt / (ht / 100 * ht / 100);
         var fBMI = Math.round(finalBmi * 10) / 10;
         return fBMI;
+    }
+}
+
+
+function getpath(filepath) {
+    return path.join(__dirname, filepath);
+}
+
+function readFileSync(filepath, encoding) {
+    return fs.readFileSync(path.resolve(__dirname, filepath), { encoding: encoding || 'base64' });
+    //return fs.readFileSync(path.join(__dirname, filepath), { encoding: encoding || 'base64' });
+}
+
+function readFileSyncdemo(filepath, encoding) {
+    return fs.readFileSync(filepath, { encoding: encoding || 'base64' });
+}
+
+function readFile(filepath) {
+    console.log(filepath);
+    return fs.readFileSync(filepath, 'base64');
+}
+
+//update image in to database
+function uploadImg(id) {
+    // var imgData = document.getElementById("img1");
+    // // console.log(imgData.src);
+    // blobUtil.imgSrcToBlob(imgData.src).then(function(blob) {
+    //     var i = Json.stringify(blob);
+    //     console.log(i);
+    //     console.log(blob);
+    //     // success
+    // }).catch(function(err) {
+    //     // error
+    // });
+
+    // var t1 = $("#input" + id)[0].files[0].path;
+    // var demo = readFile(t1);
+    // var t1 = dataURItoBlob(demo);
+    // console.log(t1);
+    // console.log(demo);
+
+    // blobUtil.base64StringToBlob(demo).then(function(blob) {
+    //     var i = json.stringify(blob);
+    //     console.log(i);
+    //     // success
+    // }).catch(function(err) {
+    //     // error
+    // });
+
+    // var pid = id + 1;
+    // // console.log(profileImage.img);
+    // if (demo != null || demo != "") {
+    //     var details = [demo, userid];
+
+    //     var sql = `update images_table set img2=? where memberno=?`;
+    //     database.updatePerson(sql, details);
+    // }
+}
+
+function encodeImageFileAsURL() {
+
+    var filesSelected = document.getElementById("input1").files;
+    if (filesSelected.length > 0) {
+        var fileToLoad = filesSelected[0];
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function(fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+            var newImage = document.createElement('img');
+            newImage.src = srcData;
+            document.getElementById("img2").src = srcData;
+            //alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
+            console.log("Converted Base64 version is " + document.getElementById("img2").src);
+        }
+        fileReader.readAsDataURL(fileToLoad);
     }
 }
