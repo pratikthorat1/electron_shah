@@ -1,7 +1,7 @@
 const database = require('./js/database');
 
 var userid;
-
+const reader = new FileReader();
 window.onload = function() {
     // var user = $_GET('user');
     //user id from URL
@@ -10,12 +10,22 @@ window.onload = function() {
     //  var result = captured ? captured : 'myDefaultValue';
 
     userid = location.search.split('user=')[1];
-    console.log(userid.substr(0, 1));
+    //console.log(userid.substr(0, 1));
 
 
-    console.log('age: ' + getAge("05-01-1991"));
-    console.log('height in feet' + getHeightincm(4, 10));
-    console.log('BMI cal - ' + getBMI(getHeightincm(5, 10), 80));
+
+    // This fires after the blob has been read/loaded.
+    reader.addEventListener('loadend', (e) => {
+        const text = e.srcElement.result;
+        console.log(text);
+    });
+
+    // Start reading the blob as text.
+
+
+    // console.log('age: ' + getAge("05-01-1991"));
+    // console.log('height in feet' + getHeightincm(4, 10));
+    // console.log('BMI cal - ' + getBMI(getHeightincm(5, 10), 80));
     // Populate the table
     populateProgressTable(userid);
     populateMeasurementTable(userid);
@@ -108,18 +118,23 @@ function populateProgressTable(id) {
 
     // Retrieve the persons
     database.getPersonsProgress(id, function(persons) {
-        console.log(persons.length);
+        // console.log(persons.length);
         // Generate the table body
         var tableBody = '';
+        var r1 = 0;
+        var r2, r3, r4, totalrecip, foodpkt, month, weightlose, totalwlose, abmi = 0;
         for (i = 0; i < persons.length; i++) {
+            r1 += persons[i].recip1;
+
             tableBody += '<tr>';
             tableBody += '  <td>' + persons[i].prog_date + '</td>';
             tableBody += '  <td>' + persons[i].prog_weight + '</td>';
             tableBody += '  <td>' + persons[i].foodpkt + '</td>';
-            tableBody += '  <td>' + persons[i].recip1 + '</td>';
+            tableBody += '  <td>' + r1 + '</td>';
             tableBody += '  <td>' + persons[i].recip2 + '</td>';
             tableBody += '  <td>' + persons[i].recip3 + '</td>';
             tableBody += '  <td>' + persons[i].recip4 + '</td>';
+
             tableBody += '  <td>' + persons[i].total_recip + '</td>';
             tableBody += '  <td>' + persons[i].prog_food + '</td>';
             tableBody += '  <td>' + persons[i].total_food + '</td>';
@@ -169,8 +184,9 @@ function addPersonProgress() {
     document.getElementById('saveButton').style.visibility = 'hidden';
 }
 
-function saveProgress() {
-    var date = document.getElementById('date');
+function saveProgresstable() {
+    var rowid = document.getElementById('rowid').value;
+    var date = document.getElementById('date').value;
     var weight = document.getElementById('weight').value.toString();
     var fp = document.getElementById('fp').value.toString();
     var r1 = document.getElementById('r1').value.toString();
@@ -178,15 +194,38 @@ function saveProgress() {
     var r3 = document.getElementById('r3').value.toString();
     var r4 = document.getElementById('r4').value.toString();
     var remarks = document.getElementById('remarks').value.toString();
-    database.singlePerson(sql, id, dt, function(persons) {
-        console.log(persons);
+    var details = [date, weight, fp, r1, r2, r3, r4, remarks, userid, rowid];
+
+    var sql = `update progress_table set prog_date=?,prog_weight=?,foodpkt=?,recip1=?,recip2=?,recip3=?,recip4=?,remark=? where memberno=? and rowid=? `;
+    database.updatePerson(sql, details);
+}
+
+
+function insertProgresstable() {
+    var d; //= new Date(year,month,date);
+    var mdate = $("#date").val().toString();
+    database.getDatefromdtp(mdate, function(dt) {
+        d = dt[0] + "-" + dt[1] + "-" + dt[2];
+        //console.log(d);
     });
+
+    var weight = document.getElementById('weight').value.toString();
+    var fp = document.getElementById('fp').value.toString();
+    var r1 = document.getElementById('r1').value.toString();
+    var r2 = document.getElementById('r2').value.toString();
+    var r3 = document.getElementById('r3').value.toString();
+    var r4 = document.getElementById('r4').value.toString();
+    var remarks = document.getElementById('remarks').value.toString();
+    var details = [userid, d, weight, fp, r1, r2, r3, r4, remarks]
+    var sql = `insert into progress_table (memberno,prog_date,prog_weight,foodpkt,recip1,recip2,recip3,recip4,remark) values(?,?,?,?,?,?,?,?,?) `;
+    database.updatePerson(sql, details);
 }
 
 function updatePersonProgress(id, dt) {
     //update single user in table
 
     document.getElementById('addButton').style.visibility = 'hidden';
+    var rowid = document.getElementById('rowid');
     var date = document.getElementById('date');
     var weight = document.getElementById('weight');
     var fp = document.getElementById('fp');
@@ -195,10 +234,14 @@ function updatePersonProgress(id, dt) {
     var r3 = document.getElementById('r3');
     var r4 = document.getElementById('r4');
     var remarks = document.getElementById('remarks');
-    var sql = `select * from progress_table where memberno=? and prog_date=?`;
+    var sql = "select `_rowid_`,* from progress_table where memberno=? and prog_date=?";
     database.singlePerson(sql, id, dt, function(persons) {
-        console.log(persons);
-        date.value = persons.prog_date;
+        //console.log(persons.prog_date);
+        database.getDatefromdb(persons.prog_date, function(dt) {
+            date.value = dt[0] + "-" + dt[1] + "-" + dt[2];
+        });
+        var str = new Date();
+        rowid.value = persons.rowid;
         weight.value = persons.prog_weight;
         fp.value = persons.foodpkt;
         r1.value = persons.recip1;
@@ -206,7 +249,6 @@ function updatePersonProgress(id, dt) {
         r3.value = persons.recip3;
         r4.value = persons.recip4;
         remarks.value = persons.remark;
-
     });
     $("#myModal").modal('show');
 }
@@ -258,6 +300,7 @@ function updatePersonMeasurement(id, dt) {
     //update single user in table
 
     document.getElementById('mgt_addButton').style.visibility = 'hidden';
+    var rowid = document.getElementById('mgt_rowid');
     var date = document.getElementById('mgt_date');
     var weight = document.getElementById('mgt_weight');
     var height = document.getElementById('mgt_height');
@@ -267,10 +310,13 @@ function updatePersonMeasurement(id, dt) {
     var chest = document.getElementById('mgt_chest');
     var waist = document.getElementById('mgt_waist');
     var hips = document.getElementById('mgt_hips');
-    var sql = `select * from measurement_table where memberno=? and mgt_date=?`;
+    var sql = "select `_rowid_`,* from measurement_table where memberno=? and mgt_date=?";
     database.singlePerson(sql, id, dt, function(persons) {
-        console.log(persons);
-        date.value = persons.mgt_date;
+        database.getDatefromdb(persons.mgt_date, function(dt) {
+            console.log(dt);
+            date.value = dt[0] + "-" + dt[1] + "-" + dt[2];
+        });
+        rowid.value = persons.rowid;
         weight.value = persons.mgt_weight;
         height.value = persons.mgt_height;
         neck.value = persons.mgt_neck;
@@ -283,6 +329,48 @@ function updatePersonMeasurement(id, dt) {
     });
     $("#measurement").modal('show');
 }
+
+function InsertMeasurementtable() {
+    var d; //= new Date(year,month,date);
+    var mdate = $("#mgt_date").val().toString();
+    database.getDatefromdtp(mdate, function(dt) {
+        d = dt[0] + "-" + dt[1] + "-" + dt[2];
+    });
+
+    var rowid = document.getElementById('mgt_rowid').value;
+    var weight = document.getElementById('mgt_weight').value.toString();
+    var height = document.getElementById('mgt_height').value.toString();
+    var neck = document.getElementById('mgt_neck').value.toString();
+    var shoulder = document.getElementById('mgt_shoulder').value.toString();
+    var midarm = document.getElementById('mgt_midarm').value.toString();
+    var chest = document.getElementById('mgt_chest').value.toString();
+    var waist = document.getElementById('mgt_waist').value.toString();
+    var hips = document.getElementById('mgt_hips').value.toString();
+    var details = [userid, d, height, weight, neck, shoulder, midarm, chest, waist, hips];
+    var sql = `insert into measurement_table (memberno,mgt_date,mgt_height,mgt_weight,mgt_neck,mgt_sholder,mgt_midarm,mgt_chest,mgt_waist,mgt_hips) values (?,?,?,?,?,?,?,?,?,?)`;
+    database.updatePerson(sql, details);
+    populateMeasurementTable(userid);
+
+}
+
+//save measyrement details in the measurement table
+function saveMeasurementtable() {
+    var rowid = document.getElementById('mgt_rowid').value;
+    var date = document.getElementById('mgt_date').value;
+    var weight = document.getElementById('mgt_weight').value.toString();
+    var height = document.getElementById('mgt_height').value.toString();
+    var neck = document.getElementById('mgt_neck').value.toString();
+    var shoulder = document.getElementById('mgt_shoulder').value.toString();
+    var midarm = document.getElementById('mgt_midarm').value.toString();
+    var chest = document.getElementById('mgt_chest').value.toString();
+    var waist = document.getElementById('mgt_waist').value.toString();
+    var hips = document.getElementById('mgt_hips').value.toString();
+    var details = [date, height, weight, neck, shoulder, midarm, chest, waist, hips, userid, rowid];
+    var sql = `update measurement_table set mgt_date=?,mgt_height=?,mgt_weight=?,mgt_neck=?,mgt_sholder=?,mgt_midarm=?,mgt_chest=?,mgt_waist=?,mgt_hips=? where memberno=? and rowid=?`;
+    database.updatePerson(sql, details);
+    populateMeasurementTable(userid);
+}
+
 //get photos from database for this user
 function populateImagesTable(id) {
 
@@ -291,15 +379,23 @@ function populateImagesTable(id) {
 
         if ((persons.img2) != null && (persons.img4) != "") {
             var data = persons.img2;
+
             var bytes = new Uint8Array(data.length / 2);
             for (var j = 0; j < data.length; j += 2) {
                 bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
             }
             // Make a Blob from the bytes
             var blob = new Blob([bytes], { type: 'image/bmp' });
+
             document.getElementById('img1').src = URL.createObjectURL(blob);
+            //const blb = new Blob([document.getElementById('img1').src], { type: "text/plain" });
+            const blb = new Blob([document.getElementById('img1').src], { type: "Image/png" });
+            reader.readAsText(blb);
+            //reader.readAsDataURL(blb);
+
         } else {
             document.getElementById('img1').src = "img/user.png";
+            var bb = new blob()
         }
         if ((persons.img3) != null && (persons.img4) != "") {
             var data = persons.img3;
@@ -323,7 +419,7 @@ function populateImagesTable(id) {
             // Make a Blob from the bytes
             var blob = new Blob([bytes], { type: 'image/bmp' });
 
-            document.getElementById('img3').src = URL.createObjectURL(blob);;
+            document.getElementById('img3').src = URL.createObjectURL(blob);
         } else {
             document.getElementById('img3').src = "img/user.png";
         }

@@ -147,8 +147,9 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
+                    <input type="hidden" id="rowid">
                     <label>Date</label>
-                    <input type="text" id="date"><br>
+                    <input type="date" id="date"><br>
                     <label>weight</label>
                     <input type="text" id="weight"><br>
                     <label>Food Packets</label>
@@ -166,8 +167,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onClick="addProgress();" id="addButton" name="description">Save</button>
-                    <button type="button" onClick="saveProgress();" id="saveButton" name="description">Save</button>
+                    <button type="button" onClick="insertProgresstable();" id="addButton" name="description">Add</button>
+                    <button type="button" onClick="saveProgresstable();" id="saveButton" name="description">Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
@@ -181,8 +182,9 @@
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-body">
+                    <input type="hidden" id="mgt_rowid">
                     <label>Date</label>
-                    <input type="text" id="mgt_date"><br>
+                    <input type="date" id="mgt_date"><br>
                     <label>height</label>
                     <input type="text" id="mgt_height"><br>
                     <label>weight</label>
@@ -201,8 +203,8 @@
                     <input type="text" id="mgt_hips"><br>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onClick="addMeasurement();" id="mgt_addButton" name="description">Save</button>
-                    <button type="button" onClick="saveMeasurement();" id="mgt_saveButton" name="description">Save</button>
+                    <button type="button" onClick="InsertMeasurementtable();" id="mgt_addButton" name="description" data-dismiss="modal">Add</button>
+                    <button type="button" onClick="saveMeasurementtable();" id="mgt_saveButton" name="description" data-dismiss="modal">Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
