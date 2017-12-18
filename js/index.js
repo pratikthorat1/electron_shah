@@ -1,4 +1,5 @@
 const database = require('./js/database');
+const image2base64 = require('image-to-base64');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./dbfinal.db');
 
@@ -8,6 +9,25 @@ window.onload = function() {
     // Populate the table
     populateTable();
     getBirthdays();
+
+
+
+
+
+    var img = document.getElementById("profileImage");
+    var imgdata;
+    imgdata = image2base64("img/user1.png");
+    console.log(imgdata);
+    var birthbtn = document.getElementById("birthbtn");
+    var image = new Image();
+    //image.src = 'data:image/png;base64,' + imgdata.Promise.PromiseValue;
+    document.body.appendChild(image);
+    const { foo, bar } = imgdata.then(imgdata => imgdata.PromiseValue);
+    console.log(foo);
+    image.src = 'data:image/png;base64,' + imgdata.toString();
+
+
+
     $(".overlay").click(function(e) {
         $("#imageUpload").click();
     });
@@ -20,6 +40,7 @@ window.onload = function() {
     $("#imageUpload").change(function() {
         fasterPreview(this);
     });
+
 
 
 
@@ -81,12 +102,13 @@ window.onload = function() {
             var tableBody = '';
             for (i = 0; i < persons.length; i++) {
                 var data = persons[i].img;
+                if (data != null) {
+                    // Convert the string to bytes
+                    var bytes = new Uint8Array(data.length / 2);
 
-                // Convert the string to bytes
-                var bytes = new Uint8Array(data.length / 2);
-
-                for (var j = 0; j < data.length; j += 2) {
-                    bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+                    for (var j = 0; j < data.length; j += 2) {
+                        bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+                    }
                 }
 
                 // Make a Blob from the bytes
@@ -128,6 +150,7 @@ function fasterPreview(uploader) {
 function getMemberid() {
     database.getNewMemberid(function(id) {
         // console.log(id[0] + "-" + id[1] + "-" + id[2]);
+        document.getElementById("member_id").value = id[0] + "-" + id[1] + "-" + id[2];
     })
 }
 
@@ -271,6 +294,22 @@ function getBMI() {
         var finalBmi = wt / (ht / 100 * ht / 100);
         var fBMI = Math.round(finalBmi * 10) / 10;
         $("#current_bmi").val(fBMI);
+        getTargetWeight();
+        return fBMI;
+    }
+}
+
+function getTargetWeight() {
+    var ht1 = $("#height_feet").val().toString();
+    var ht2 = $("#height_inch").val().toString();
+
+    var ht = getHeightincm(ht1, ht2);
+    var bmi = 21.5;
+    if (ht > 0) {
+        var targetwt = bmi * (ht / 100 * ht / 100);
+        // var finalBmi = wt / (ht / 100 * ht / 100);
+        var fBMI = Math.round(targetwt * 10) / 10;
+        $("#target_weight").val(fBMI);
         return fBMI;
     }
 }
@@ -307,19 +346,170 @@ function savePerson() {
 
     var img = document.getElementById("profileImage");
     var imgdata;
-    blobUtil.imgSrcToBlob(img.src).then(function(blob) {
-        imgdata = blob;
-        console.log(imgdata.img);
-        var blobURL = blobUtil.createObjectURL(blob);
+    imgdata = image2base64(img.src);
+    console.log(imgdata);
+    // image2base64(img.src)
+    //     .then(
+    //         (response) => {
+    //             console.log(response); //cGF0aC90by9maWxlLmpwZw==
+    //         }
+    //     )
+    //     .catch(
+    //         (error) => {
+    //             console.log(error); //Exepection error....
+    //         }
+    //     )
+    // var sql = "insert into images_table(memberno, img1) values (?,?)";
 
-        var newImg = document.createElement('img');
-        newImg.src = blobURL;
-        console.log(blobURL);
-        imagedetails = [memberno, imgdata, imgdata, imgdata, imgdata, imgdata];
-        //database.insertpersondetails(personaldetails, imagedetails);
-    });
+    // db.run(sql, memberno, blob, function(err) {
+    //     if (err) {
+    //         return console.log(err.message);
+    //     }
+    //     // get the last insert id
+    //     console.log(`A row has been inserted with rowid ${this.lastID}`);
+    // });
+
+
+    //database.insertpersondetails(personaldetails, imagedetails);
+    // });
+
+}
 
 
 
+/*------------------instant validation-------------*/
+function addEvent(node, type, callback) {
+    if (node.addEventListener) {
+        node.addEventListener(type, function(e) {
+            callback(e, e.target);
+        }, false);
+    } else if (node.attachEvent) {
+        node.attachEvent('on' + type, function(e) {
+            callback(e, e.srcElement);
+        });
+    }
+}
 
+function shouldBeValidated(field) {
+    return (!(field.getAttribute("readonly") || field.readonly) &&
+        !(field.getAttribute("disabled") || field.disabled) &&
+        (field.getAttribute("pattern") || field.getAttribute("required"))
+    );
+}
+
+function instantValidation(field) {
+    if (shouldBeValidated(field)) {
+        var invalid =
+            (field.getAttribute("required") && !field.value) ||
+            (field.getAttribute("pattern") &&
+                field.value &&
+                !new RegExp(field.getAttribute("pattern")).test(field.value));
+        if (!invalid && field.getAttribute("aria-invalid")) {
+            field.removeAttribute("aria-invalid");
+        } else if (invalid && !field.getAttribute("aria-invalid")) {
+            field.setAttribute("aria-invalid", "true");
+        }
+    }
+}
+
+addEvent(document, "change", function(e, target) {
+    instantValidation(target);
+});
+
+var fields = [
+    document.getElementsByTagName("input"),
+    document.getElementsByTagName("textarea")
+];
+for (var a = fields.length, i = 0; i < a; i++) {
+    for (var b = fields[i].length, j = 0; j < b; j++) {
+        addEvent(fields[i][j], "change", function(e, target) {
+            instantValidation(target);
+        });
+    }
+}
+
+function ValDigit(val) {
+
+    var keyCodeEntered = (event.which) ? event.which : (window.event.keyCode) ? window.event.keyCode : -1;
+
+    if ((keyCodeEntered >= 48) && (keyCodeEntered <= 57)) {
+
+        return true;
+
+    } else if (keyCodeEntered == 46) {
+
+        // if ((val.value) && (val.value.indexOf('.') >= 0))
+
+        //     return false;
+
+        // else
+
+        return false //true;
+
+    }
+
+
+
+    return false;
+
+}
+
+function ValDigitDecimal(val) {
+
+    var keyCodeEntered = (event.which) ? event.which : (window.event.keyCode) ? window.event.keyCode : -1;
+
+    if ((keyCodeEntered >= 48) && (keyCodeEntered <= 57)) {
+
+        return true;
+
+    } else if (keyCodeEntered == 46) {
+
+        if ((val.value) && (val.value.indexOf('.') >= 0))
+
+            return false;
+
+        else
+
+            return true;
+
+    }
+
+
+
+    return false;
+
+}
+/*-----------instant validation ends-----------*/
+
+
+function dataURItoBlob(dataURI) {
+    // convert base64 to raw binary data held in a string
+    var byteString = atob(dataURI.split(',')[1]);
+
+    // separate out the mime component
+    var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+    // write the bytes of the string to an ArrayBuffer
+    var arrayBuffer = new ArrayBuffer(byteString.length);
+    var _ia = new Uint8Array(arrayBuffer);
+    for (var i = 0; i < byteString.length; i++) {
+        _ia[i] = byteString.charCodeAt(i);
+    }
+
+    var dataView = new DataView(arrayBuffer);
+    var blob = new Blob([dataView], { type: mimeString });
+    console.log(blob);
+    return blob;
+}
+
+function imageToBase64(img) {
+    var canvas, ctx, dataURL, base64;
+    canvas = document.createElement("canvas");
+    ctx = canvas.getContext("2d");
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+    dataURL = canvas.toDataURL("image/png");
+    base64 = dataURL.replace(/^data:image\/png;base64,/, "");
+    return base64;
 }
