@@ -83,7 +83,7 @@ exports.getallrows = function(fna) {
 //get each members database from progress table
 exports.getPersonsProgress = function(id, fnc) {
 
-    db.all("SELECT * from progress_table where memberno=? ORDER BY prog_date desc", id, function(err, rows) {
+    db.all("SELECT * from progress_table where memberno=? ORDER BY prog_date asc", id, function(err, rows) {
         fnc(rows);
     });
 }
@@ -222,4 +222,30 @@ exports.insertpersondetails = function(persondetails, imagedetails) {
         }
         console.log("image inserted");
     });
+}
+
+exports.getDatefromdb = function(dt, setdt) {
+    var mdate = dt;
+    // var yearThen = parseInt(mdate.substring(7, 10), 10);
+    // var monthThen = parseInt(mdate.substring(4, 5), 10);
+    // var dayThen = parseInt(mdate.substring(1, 2), 10);
+
+    var yearThen = dt.toString().substr(6, 4);
+    var monthThen = dt.toString().substr(3, 2);
+    var dayThen = dt.toString().substr(0, 2);
+    var date = [yearThen, monthThen, dayThen];
+    setdt(date)
+        //return yearThen + "-" + monthThen + "-" + dayThen;
+}
+
+exports.getDatefromdtp = function(mdate, getdt) {
+    //var mdate = $("#date").val().toString(); put at strat of function
+    //var mdate = dt.val().toString();
+    var yearThen = parseInt(mdate.substring(0, 4), 10);
+    var monthThen = parseInt(mdate.substring(5, 7), 10);
+    var dayThen = parseInt(mdate.substring(8, 10), 10);
+    var date = [dayThen, monthThen, yearThen];
+    getdt(date);
+    //return dayThen + "-" + monthThen + "-" + yearThen;
+
 }
