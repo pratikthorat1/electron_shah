@@ -72,9 +72,6 @@ exports.getallrows = function(fna) {
         }
         console.log(rows);
         fna(rows);
-        // rows.forEach((row) => {
-        //     console.log(row.name);
-        // });
     });
 
 }
@@ -83,7 +80,7 @@ exports.getallrows = function(fna) {
 //get each members database from progress table
 exports.getPersonsProgress = function(id, fnc) {
 
-    db.all("SELECT * from progress_table where memberno=? ORDER BY prog_date asc", id, function(err, rows) {
+    db.all("SELECT `_rowid_`,* from progress_table where memberno=? ORDER BY rowid asc", id, function(err, rows) {
         fnc(rows);
     });
 }
@@ -119,14 +116,14 @@ exports.updatePerson = function(sql, stringarray) {
     });
 }
 
-exports.singlePerson = function(sql, id, id1, fct) {
+exports.singlePerson = function(sql, id, fct) {
         //  let sql = `SELECT *
         // FROM user_profile
         // WHERE memberno  = ?`;
         // let accid = id;
 
         // first row only
-        db.get(sql, id, id1, (err, row) => {
+        db.get(sql, id, (err, row) => {
             if (err) {
                 return console.error(err.message);
             }
@@ -137,7 +134,7 @@ exports.singlePerson = function(sql, id, id1, fct) {
     //get each members database from progress table
 exports.getPersonsMeasurement = function(id, fnc) {
 
-    db.all("SELECT * from measurement_table where memberno=? ORDER BY mgt_date desc", id, function(err, rows) {
+    db.all("SELECT `_rowid_`,* from measurement_table where memberno=? ORDER BY mgt_date desc", id, function(err, rows) {
         fnc(rows);
     });
 }
@@ -164,7 +161,7 @@ exports.getNewMemberid = function(fnc) {
             var code1 = 0;
             return console.error(err.message);
         }
-        console.log(today.getMonth() + 1);
+        //console.log(today.getMonth() + 1);
         if (month == (today.getMonth() + 1)) {
             code1 = row.num;
 
@@ -173,7 +170,7 @@ exports.getNewMemberid = function(fnc) {
         stringarr[0] = (today.getMonth() + 1).toString();
         stringarr[1] = today.getFullYear().toString().substr(-2);
         stringarr[2] = code1;
-        console.log(stringarr);
+        // console.log(stringarr);
         fnc(stringarr);
     });
 
@@ -194,13 +191,14 @@ exports.getallrowsbyname = function(name, fna) {
     // db.all("select up.memberno as memberno,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it", function(err, rows) {
     //     fnc(rows);
     // });
-    var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it where up.person_nm like ? group by up.memberno`;
+    //var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it where up.person_nm like '%?%' group by up.memberno`;
 
-    db.all(sql, name, (err, rows) => {
+    var sql = `select * from user_profile where person_nm like '%vai%'`; // where person_nm like '%" + name + "%'";
+    db.all(sql, (err, rows) => {
         if (err) {
             throw err;
         }
-        console.log("get name by person:=" + rows);
+        // console.log("get name by person:=" + rows);
         fna(rows);
     });
 
@@ -248,4 +246,28 @@ exports.getDatefromdtp = function(mdate, getdt) {
     getdt(date);
     //return dayThen + "-" + monthThen + "-" + yearThen;
 
+}
+
+exports.getdata = function() {
+    var readRecordsFromMediaTable = function() {
+        return new Promise(function(resolve, reject) {
+            var responseObj;
+            db.all("SELECT * FROM user_info", null, function cb(err, rows) {
+                if (err) {
+                    responseObj = {
+                        'error': err
+                    };
+                    reject(responseObj);
+                } else {
+                    responseObj = {
+                        statement: this,
+                        rows: rows
+                    };
+                    resolve(responseObj);
+                }
+                db.close();
+            });
+        });
+    }
+    console.log(readRecordsFromMediaTable());
 }

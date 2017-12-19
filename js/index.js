@@ -1,5 +1,5 @@
 const database = require('./js/database');
-const image2base64 = require('image-to-base64');
+//const image2base64 = require('image-to-base64');
 var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('./dbfinal.db');
 
@@ -14,17 +14,17 @@ window.onload = function() {
 
 
 
-    var img = document.getElementById("profileImage");
-    var imgdata;
-    imgdata = image2base64("img/user1.png");
-    console.log(imgdata);
-    var birthbtn = document.getElementById("birthbtn");
-    var image = new Image();
-    //image.src = 'data:image/png;base64,' + imgdata.Promise.PromiseValue;
-    document.body.appendChild(image);
-    const { foo, bar } = imgdata.then(imgdata => imgdata.PromiseValue);
-    console.log(foo);
-    image.src = 'data:image/png;base64,' + imgdata.toString();
+    // var img = document.getElementById("profileImage");
+    // var imgdata;
+    // imgdata = image2base64("img/user1.png");
+    // console.log(imgdata);
+    // var birthbtn = document.getElementById("birthbtn");
+    // var image = new Image();
+    // //image.src = 'data:image/png;base64,' + imgdata.Promise.PromiseValue;
+    // document.body.appendChild(image);
+    // const { foo, bar } = imgdata.then(imgdata => imgdata.PromiseValue);
+    // console.log(foo);
+    // image.src = 'data:image/png;base64,' + imgdata.toString();
 
 
 
@@ -33,7 +33,6 @@ window.onload = function() {
     });
 
     $("#search").change(function() {
-
         populateTableByName();
     });
 
@@ -238,6 +237,11 @@ function openModal() {
     $("#mybirth").modal('show');
 
 
+}
+
+function onserch(e) {
+    //populateTableByName();
+    database.readRecordsFromMediaTable();
 }
 
 // // Populates the persons table

@@ -1,4 +1,5 @@
 const database = require('./js/database');
+const image2base64 = require('image-to-base64');
 var assert = require('assert');
 var fs = require('fs');
 var path = require('path');
@@ -25,7 +26,25 @@ window.onload = function() {
         console.log(text);
     });
 
-    // Start reading the blob as text.
+    $('#myModal').on('hidden.bs.modal', function(e) {
+        $(this)
+            .find("input,textarea,select")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
+    })
+    $('#measurement').on('hidden.bs.modal', function(e) {
+            $(this)
+                .find("input,textarea,select")
+                .val('')
+                .end()
+                .find("input[type=checkbox], input[type=radio]")
+                .prop("checked", "")
+                .end();
+        })
+        // Start reading the blob as text.
 
 
     // console.log('age: ' + getAge("05-01-1991"));
@@ -38,53 +57,53 @@ window.onload = function() {
         // populateTable();
         //tablecreate();
 
-    // Add the add button click event
-    document.getElementById('add').addEventListener('click', () => {
+    // // Add the add button click event
+    // document.getElementById('add').addEventListener('click', () => {
 
-        // // Retrieve the input fields
-        var firstname = document.getElementById('firstname').value;
-        // var lastname = document.getElementById('lastname');
+    //     // // Retrieve the input fields
+    //     var firstname = document.getElementById('firstname').value;
+    //     // var lastname = document.getElementById('lastname');
 
-        // var sql=`INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
-        // var stringarr=[];
-        // stringarr[0]=firstname.value;
-        // stringarr[1]=1111;
-        // stringarr[2]=lastname.value;
-        // // Save the person in the database
-        // database.addPerson(sql,stringarr);
+    //     // var sql=`INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
+    //     // var stringarr=[];
+    //     // stringarr[0]=firstname.value;
+    //     // stringarr[1]=1111;
+    //     // stringarr[2]=lastname.value;
+    //     // // Save the person in the database
+    //     // database.addPerson(sql,stringarr);
 
-        // // Reset the input fields
-        // firstname.value = '';
-        // lastname.value = '';
+    //     // // Reset the input fields
+    //     // firstname.value = '';
+    //     // lastname.value = '';
 
-        // // Repopulate the table
-        // populateTable();
-        populateProgressTable(firstname);
-    });
+    //     // // Repopulate the table
+    //     // populateTable();
+    //     populateProgressTable(firstname);
+    // });
 
     // Add the update button click event
-    document.getElementById('update').addEventListener('click', () => {
-        $("#myModal").modal('show');
-        // Retrieve the input fields
-        var firstname = document.getElementById('firstname');
-        var lastname = document.getElementById('lastname');
+    //     document.getElementById('update').addEventListener('click', () => {
+    //         $("#myModal").modal('show');
+    //         // Retrieve the input fields
+    //         var firstname = document.getElementById('firstname');
+    //         var lastname = document.getElementById('lastname');
 
-        var sql = `Update customers set name=? where accountno=?`;
+    //         var sql = `Update customers set name=? where accountno=?`;
 
-        var stringarr = [];
-        stringarr[0] = document.getElementById('firstname').value;
-        stringarr[1] = ocument.getElementById('lastname').value;
-        // stringarr[2]=lastname.value;
-        // Save the person in the database
-        database.updatePerson(sql, stringarr);
+    //         var stringarr = [];
+    //         stringarr[0] = document.getElementById('firstname').value;
+    //         stringarr[1] = ocument.getElementById('lastname').value;
+    //         // stringarr[2]=lastname.value;
+    //         // Save the person in the database
+    //         database.updatePerson(sql, stringarr);
 
-        // Reset the input fields
-        firstname.value = '';
-        lastname.value = '';
+    //         // Reset the input fields
+    //         firstname.value = '';
+    //         lastname.value = '';
 
-        // Repopulate the table
-        populateTable();
-    });
+    //         // Repopulate the table
+    //         populateTable();
+    //     });
 }
 
 
@@ -127,29 +146,57 @@ function populateProgressTable(id) {
         // Generate the table body
         var tableBody = '';
         var r1 = 0;
-        var r2, r3, r4, totalrecip, foodpkt, month, weightlose, totalwlose, abmi = 0;
+        var r2 = 0,
+            r3 = 0,
+            w1 = 0,
+            totalrecip = 0,
+            foodpkt = 0,
+            month = 0,
+            weightlose = 0,
+            totalwlose = 0,
+            abmi = 0;
+
         for (i = 0; i < persons.length; i++) {
+            if (i > 0) {
+                w1 = persons[i - 1].prog_weight;
+            } else {
+                w1 = persons[i].prog_weight
+            }
+            var w2 = persons[i].prog_weight;
+            weightlose = w2 - w1;
+            w1 = w2;
+            totalwlose += weightlose;
+
             r1 += persons[i].recip1;
+            r2 += persons[i].recip1;
+            r3 += persons[i].recip1;
+            totalrecip = r1 + r2 + r3;
+            foodpkt += persons[i].foodpkt;
+
+            if (foodpkt >= 30) {
+                foodpkt = foodpkt - 30;
+                month++;
+            }
 
             tableBody += '<tr>';
             tableBody += '  <td>' + persons[i].prog_date + '</td>';
             tableBody += '  <td>' + persons[i].prog_weight + '</td>';
-            tableBody += '  <td>' + persons[i].foodpkt + '</td>';
+            tableBody += '  <td>' + weightlose + '</td>';
+            tableBody += '  <td>' + totalwlose + '</td>';
             tableBody += '  <td>' + r1 + '</td>';
-            tableBody += '  <td>' + persons[i].recip2 + '</td>';
-            tableBody += '  <td>' + persons[i].recip3 + '</td>';
+            tableBody += '  <td>' + r2 + '</td>';
+            tableBody += '  <td>' + r3 + '</td>';
             tableBody += '  <td>' + persons[i].recip4 + '</td>';
+            tableBody += '  <td>' + totalrecip + '</td>';
+            tableBody += '  <td>' + persons[i].foodpkt + '</td>';
+            tableBody += '  <td>' + foodpkt + '</td>';
+            // tableBody += '  <td>' + foodpkt + '</td>';
+            tableBody += '  <td>' + month + '</td>';
 
-            tableBody += '  <td>' + persons[i].total_recip + '</td>';
-            tableBody += '  <td>' + persons[i].prog_food + '</td>';
-            tableBody += '  <td>' + persons[i].total_food + '</td>';
-            tableBody += '  <td>' + persons[i].month + '</td>';
-            tableBody += '  <td>' + persons[i].weight_lose + '</td>';
-            tableBody += '  <td>' + persons[i].total_wlose + '</td>';
             tableBody += '  <td>' + persons[i].BMI + '</td>';
             tableBody += '  <td width="300px";>' + persons[i].remark + '</td>';
-            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i>'
-            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].prog_date + '\')" "></i></td>'
+            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].rowid + '\')" "></i>'
+            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonProgress(\'' + persons[i].memberno + '\',\'' + persons[i].rowid + '\')" "></i></td>'
                 //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
                 //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
             tableBody += '</tr>';
@@ -159,6 +206,7 @@ function populateProgressTable(id) {
         // Fill the table content
         document.getElementById('tablebody').innerHTML = tableBody;
     });
+
 }
 
 
@@ -184,14 +232,24 @@ function tablecreate() {
 }
 
 function addPersonProgress() {
-    //update single user in table
+    //insert single user in table
     $("#myModal").modal('show');
     document.getElementById('saveButton').style.visibility = 'hidden';
+    var date = document.getElementById('date');
+    document.getElementById('date').valueAsDate = new Date();
 }
 
 function saveProgresstable() {
+    var date; //= new Date(year,month,date);
+    var mdate = $("#date").val().toString();
+
+    database.getDatefromdtp(mdate, function(dt) {
+        date = dt[0] + "-" + dt[1] + "-" + dt[2];
+        //console.log(d);
+    });
+
     var rowid = document.getElementById('rowid').value;
-    var date = document.getElementById('date').value;
+    //var date = document.getElementById('date').value;
     var weight = document.getElementById('weight').value.toString();
     var fp = document.getElementById('fp').value.toString();
     var r1 = document.getElementById('r1').value.toString();
@@ -203,10 +261,12 @@ function saveProgresstable() {
 
     var sql = `update progress_table set prog_date=?,prog_weight=?,foodpkt=?,recip1=?,recip2=?,recip3=?,recip4=?,remark=? where memberno=? and rowid=? `;
     database.updatePerson(sql, details);
+    populateProgressTable(userid);
 }
 
 
 function insertProgresstable() {
+
     var d; //= new Date(year,month,date);
     var mdate = $("#date").val().toString();
     database.getDatefromdtp(mdate, function(dt) {
@@ -224,9 +284,10 @@ function insertProgresstable() {
     var details = [userid, d, weight, fp, r1, r2, r3, r4, remarks]
     var sql = `insert into progress_table (memberno,prog_date,prog_weight,foodpkt,recip1,recip2,recip3,recip4,remark) values(?,?,?,?,?,?,?,?,?) `;
     database.updatePerson(sql, details);
+    populateProgressTable(userid);
 }
 
-function updatePersonProgress(id, dt) {
+function updatePersonProgress(id, rid) {
     //update single user in table
 
     document.getElementById('addButton').style.visibility = 'hidden';
@@ -239,8 +300,9 @@ function updatePersonProgress(id, dt) {
     var r3 = document.getElementById('r3');
     var r4 = document.getElementById('r4');
     var remarks = document.getElementById('remarks');
-    var sql = "select `_rowid_`,* from progress_table where memberno=? and prog_date=?";
-    database.singlePerson(sql, id, dt, function(persons) {
+    var sql = "select `_rowid_`,* from progress_table where memberno=? and rowid=?";
+    var detail = [id, rid]
+    database.singlePerson(sql, detail, function(persons) {
         //console.log(persons.prog_date);
         database.getDatefromdb(persons.prog_date, function(dt) {
             date.value = dt[0] + "-" + dt[1] + "-" + dt[2];
@@ -287,8 +349,8 @@ function populateMeasurementTable(id) {
             tableBody += '  <td>' + persons[i].weight_diff + '</td>';
             tableBody += '  <td>' + persons[i].total_weight_diff + '</td>';
             tableBody += '  <td>' + persons[i].BMI + '</td>';
-            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].mgt_date + '\')" "></i>'
-            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].mgt_date + '\')" "></i></td>'
+            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].rowid + '\')" "></i>'
+            tableBody += '  &nbsp; &nbsp;<i class="fa fa-trash" aria-hidden="true" onclick="deletePersonMeasurement(\'' + persons[i].memberno + '\',\'' + persons[i].rowid + '\')" "></i></td>'
                 //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
                 //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
             tableBody += '</tr>';
@@ -300,10 +362,19 @@ function populateMeasurementTable(id) {
     });
 }
 
-//update persons Measurement
-function updatePersonMeasurement(id, dt) {
-    //update single user in table
+function addPersonMeasurement() {
+    //insert single user in table
+    $("#measurement").modal('show');
+    document.getElementById('mgt_saveButton').style.visibility = 'hidden';
+    document.getElementById('mgt_addButton').style.visibility = 'visible';
+    var date = document.getElementById('mgt_date');
+    document.getElementById('mgt_date').valueAsDate = new Date();
+}
 
+//update persons Measurement
+function updatePersonMeasurement(id, rid) {
+    //update single user in table
+    document.getElementById('mgt_saveButton').style.visibility = 'visible';
     document.getElementById('mgt_addButton').style.visibility = 'hidden';
     var rowid = document.getElementById('mgt_rowid');
     var date = document.getElementById('mgt_date');
@@ -315,8 +386,9 @@ function updatePersonMeasurement(id, dt) {
     var chest = document.getElementById('mgt_chest');
     var waist = document.getElementById('mgt_waist');
     var hips = document.getElementById('mgt_hips');
-    var sql = "select `_rowid_`,* from measurement_table where memberno=? and mgt_date=?";
-    database.singlePerson(sql, id, dt, function(persons) {
+    var sql = "select `_rowid_`,* from measurement_table where memberno=? and rowid=?";
+    var details = [id, rid];
+    database.singlePerson(sql, details, function(persons) {
         database.getDatefromdb(persons.mgt_date, function(dt) {
             console.log(dt);
             date.value = dt[0] + "-" + dt[1] + "-" + dt[2];
@@ -340,6 +412,7 @@ function InsertMeasurementtable() {
     var mdate = $("#mgt_date").val().toString();
     database.getDatefromdtp(mdate, function(dt) {
         d = dt[0] + "-" + dt[1] + "-" + dt[2];
+        console.log(d);
     });
 
     var rowid = document.getElementById('mgt_rowid').value;
@@ -435,13 +508,7 @@ function previewFile(id) {
     var file;
     var image = document.getElementById('img' + id);
     if ((file = $("#input" + id)[0].files[0])) {
-
         image.src = file.path; // ("data:image/png;base64," + data);
-        // profileImage = {
-        //     img: fs.readFileSync(file.path, encoding || 'base64')
-        // };
-        // // console.log("file path=" + file.path);
-        // console.log("base 64=" + profileImage.img);
     }
 
 
@@ -526,6 +593,10 @@ function getBMI(ht, wt) {
     }
 }
 
+function getHeight(id) {
+
+}
+
 
 function getpath(filepath) {
     return path.join(__dirname, filepath);
@@ -547,16 +618,33 @@ function readFile(filepath) {
 
 //update image in to database
 function uploadImg(id) {
-    // var imgData = document.getElementById("img1");
-    // // console.log(imgData.src);
-    // blobUtil.imgSrcToBlob(imgData.src).then(function(blob) {
-    //     var i = Json.stringify(blob);
-    //     console.log(i);
-    //     console.log(blob);
-    //     // success
-    // }).catch(function(err) {
-    //     // error
-    // });
+    var imgData = document.getElementById("img1");
+    console.log(imgData.src);
+    image2base64(imgData.src)
+        .then(
+            (response) => {
+                console.log(response); //cGF0aC90by9maWxlLmpwZw==
+                if (response != null || response != "") {
+                    var details = [response, userid];
+
+                    var sql = `update images_table set img2=? where memberno=?`;
+                    database.updatePerson(sql, details);
+                }
+            }
+        )
+        .catch(
+            (error) => {
+                console.log(error); //Exepection error....
+            }
+        )
+        // blobUtil.imgSrcToBlob(imgData.src).then(function(blob) {
+        //     var i = Json.stringify(blob);
+        //     console.log(i);
+        //     console.log(blob);
+        //     // success
+        // }).catch(function(err) {
+        //     // error
+        // });
 
     // var t1 = $("#input" + id)[0].files[0].path;
     // var demo = readFile(t1);

@@ -19,7 +19,7 @@
 <body>
     <div class="container">
         <a href="index.html">back</a>
-        <input type="file">
+        <!-- <input type="file">
         <div id="birth_date_input">Birth Date*: <input type="date" id="birth_date"></div>
         <br/>
         <div id="calculate" onclick="calculateAge();">Calculate your age**</div>
@@ -42,8 +42,15 @@
                 <label for="Update" class="invisible">x</label>
                 <input class="button-primary" value="Update" id="update" type="button">
             </div>
+        </div> -->
+        <div class="two columns">
+            <label for="add" class="invisible">x</label>
+            <input class="button-primary" value="Add progress" id="add" type="button" onclick="addPersonProgress();">
         </div>
-
+        <div class="two columns">
+            <label for="add" class="invisible">x</label>
+            <input class="button-primary" value="Add Measurement" id="add" type="button" onclick="addPersonMeasurement();">
+        </div>
     </div>
     <div id="exTab1">
         <ul class="nav nav-pills">
@@ -65,17 +72,17 @@
                         <tr>
                             <th>Date</th>
                             <th>Weight</th>
-                            <th>Food<br>Packets</th>
-                            <th>Recipe<br>1</th>
-                            <th>Recipe<br>2</th>
-                            <th>Recipe<br>3</th>
-                            <th>Recipe<br>4</th>
+                            <th>Weight<br>+/-</th>
+                            <th>Total<br>+/-</th>
+                            <th>Breakfast</th>
+                            <th>Any<br>Time</th>
+                            <th>Salad</th>
+                            <th>Other</th>
                             <th>Total<br>Recipe</th>
+                            <th>Food<br>Packets</th>
                             <th>Food</th>
-                            <th>Total<br>Food</th>
+                            <!-- <th>Total<br>Food</th> -->
                             <th>Month</th>
-                            <th>Weight<br>Lose</th>
-                            <th>Total<br>Lose</th>
                             <th>BMI</th>
                             <th>Remarks</th>
                             <th>Actions</th>
@@ -98,7 +105,7 @@
                             <th>Chest</th>
                             <th>Waist</th>
                             <th>Hips</th>
-                            <th>Weight /<br>Height</th>
+                            <th>W/H =<br>0.7</th>
                             <th>Total<br>Inchs</th>
                             <th>Inch<br>Diff.</th>
                             <th>Total<br>Inch<br>Diff.</th>
@@ -116,7 +123,7 @@
                 <div class="row">
                     <div class="col-md-4 photo">
 
-                        <input id="input1" type="file" onchange="encodeImageFileAsURL();" accept="image/*" />
+                        <input id="input1" type="file" onchange="previewFile(1);" accept="image/*" />
                         <input id="imgbtn1" type="button" onClick="uploadImg(1);" value="Upload">
                         <img id="img1" src="img/user.png">
 
@@ -154,21 +161,21 @@
                     <input type="text" id="weight"><br>
                     <label>Food Packets</label>
                     <input type="text" id="fp"><br>
-                    <label>Receipe Type 1</label>
+                    <label>Breakfast</label>
                     <input type="text" id="r1"><br>
-                    <label>Receipe Type 2</label>
+                    <label>Any Time</label>
                     <input type="text" id="r2"><br>
-                    <label>Receipe Type 3</label>
+                    <label>Salad</label>
                     <input type="text" id="r3"><br>
-                    <label>Receipe Type 4</label>
+                    <label>Other</label>
                     <input type="text" id="r4"><br>
                     <label>Remarks</label>
                     <textarea name="description" rows="10" cols="20" id="remarks"></textarea>
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onClick="insertProgresstable();" id="addButton" name="description">Add</button>
-                    <button type="button" onClick="saveProgresstable();" id="saveButton" name="description">Save</button>
+                    <button type="button" onClick="insertProgresstable();" id="addButton" name="description" data-dismiss="modal">Add</button>
+                    <button type="button" onClick="saveProgresstable();" id="saveButton" name="description" data-dismiss="modal">Save</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </div>
