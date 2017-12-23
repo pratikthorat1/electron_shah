@@ -48,11 +48,11 @@ function openAboutWindow() {
         parent: mainWindow,
         modal: true,
         show: false,
-        width: 400,
-        height: 200
+        width: 1280,
+        height: 720
     })
     aboutWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'about.html'),
+        pathname: path.join(__dirname, 'test2.html'),
         protocol: 'file:',
         slashes: true
     }))

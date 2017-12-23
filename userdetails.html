@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/skeleton.css">
     <!-- <link rel="stylesheet" href="css/index.css"> -->
     <link rel="stylesheet" href="css/userdetails.css">
+    <link rel="stylesheet" href="css/jquery.toast.min.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
@@ -13,6 +14,7 @@
     </script>
     <script src="./node_modules/blob-util/dist/blob-util.js"></script>
     <script type="text/javascript" src="js/userdetails.js"></script>
+    <script type="text/javascript" src="js/jquery.toast.min.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 </head>
 
@@ -28,19 +30,19 @@
         <div class="row">
             <div class="five columns">
                 <label for="firstname">Firstname</label>
-                <input class="u-full-width" placeholder="John" id="firstname" type="text">
+                <input class="u-full-width" placeholder="John" id="fnt" type="text">
             </div>
             <div class="five columns">
                 <label for="lastname">Lastname</label>
-                <input class="u-full-width" placeholder="Doe" id="lastname" type="text">
+                <input class="u-full-width" placeholder="Doe" id="stmt" type="text">
             </div>
             <div class="two columns">
                 <label for="add" class="invisible">x</label>
-                <input class="button-primary" value="Add" id="add" type="button">
+                <input class="button-primary" value="Get" id="get" type="button">
             </div>
             <div class="two columns">
                 <label for="Update" class="invisible">x</label>
-                <input class="button-primary" value="Update" id="update" type="button">
+                <input class="button-primary" value="Post" id="post" type="button">
             </div>
         </div> -->
         <div class="two columns">
@@ -51,6 +53,12 @@
             <label for="add" class="invisible">x</label>
             <input class="button-primary" value="Add Measurement" id="add" type="button" onclick="addPersonMeasurement();">
         </div>
+    </div>
+    <div>
+        <table>
+            <tbody id="tableprofile">
+        </table>
+        </table>
     </div>
     <div id="exTab1">
         <ul class="nav nav-pills">
@@ -124,20 +132,20 @@
                     <div class="col-md-4 photo">
 
                         <input id="input1" type="file" onchange="previewFile(1);" accept="image/*" />
-                        <input id="imgbtn1" type="button" onClick="uploadImg(1);" value="Upload">
-                        <img id="img1" src="img/user.png">
-
-                    </div>
-                    <div class="col-md-4 photo">
-                        <input id="input2" type="file" onchange="previewFile(2);" accept="image/*" />
-                        <input id="imgbtn2" type="button" onClick="uploadImg(1);" value="Upload">
+                        <input id="imgbtn2" type="button" onClick="uploadImg(2);" value="Upload">
                         <img id="img2" src="img/user.png">
 
                     </div>
                     <div class="col-md-4 photo">
-                        <input id="input3" type="file" onchange="previewFile(3);" accept="image/*" />
-                        <input id="imgbtn3" type="button" onClick="uploadImg(1);" value="Upload">
+                        <input id="input2" type="file" onchange="previewFile(2);" accept="image/*" />
+                        <input id="imgbtn3" type="button" onClick="uploadImg(3);" value="Upload">
                         <img id="img3" src="img/user.png">
+
+                    </div>
+                    <div class="col-md-4 photo">
+                        <input id="input3" type="file" onchange="previewFile(3);" accept="image/*" />
+                        <input id="imgbtn4" type="button" onClick="uploadImg(4);" value="Upload">
+                        <img id="img4" src="img/user.png">
 
                     </div>
                 </div>

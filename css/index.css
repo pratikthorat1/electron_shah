@@ -341,3 +341,15 @@
           border: 1px solid #f00;
           box-shadow: 0 0 4px 0 #f00;
       }
+      
+      #wrap {
+          width: 500px;
+          position: relative;
+          left: 50%;
+          margin-left: -250px;
+      }
+      
+      #header {
+          position: relative;
+          line-height: 1em;
+      }

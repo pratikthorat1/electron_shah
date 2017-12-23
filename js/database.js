@@ -1,23 +1,27 @@
 // Initialize the database
 // var Datastore = require('nedb');
 // db = new Datastore({ filename: 'db/persons.db', autoload: true });
-
+var path = require('path');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('./dbfinal.db');
+//var db = new sqlite3.Database('./db/dbfinal.db');
+
+var db = new sqlite3.Database(path.join(__dirname, 'dbfinal.db'));
+
+//console.log(db);
 
 var stringarray = [];
 
-exports.createtable = function(err) {
-    if (err) {
-        alert("error at create table" + err.message);
-    }
-    db.run("create table if not exists customers (user_info)");
-    db.run("CREATE TABLE if not exists images_table ( `memberno` TEXT NOT NULL, `img1` BLOB DEFAULT null, `img2` BLOB DEFAULT null, `img3` BLOB DEFAULT null, `img4` BLOB DEFAULT null, `img5` BLOB DEFAULT null )");
-    db.run("CREATE TABLE `measurement_table` ( `memberno` TEXT NOT NULL, `mgt_date` TEXT, `mgt_height` NUMERIC, `mgt_weight` NUMERIC, `mgt_neck` NUMERIC, `mgt_sholder` NUMERIC, `mgt_midarm` NUMERIC, `mgt_chest` NUMERIC, `mgt_waist` NUMERIC, `mgt_hips` NUMERIC, `mgt_wbyh` NUMERIC, `total_inch` NUMERIC, `inch_diff` NUMERIC, `total_inch_diff` NUMERIC, `weight_diff` NUMERIC, `total_weight_diff` NUMERIC, `BMI` NUMERIC )");
-    db.run("CREATE TABLE 'progress_table' ( `memberno` TEXT NOT NULL, `prog_date` TEXT, `prog_weight` NUMERIC, `foodpkt` NUMERIC, `recip1` NUMERIC, `recip2` NUMERIC, `recip3` NUMERIC, `recip4` NUMERIC, `total_recip` NUMERIC, `prog_food` NUMERIC, `total_food` NUMERIC, `month` NUMERIC, `weight_lose` NUMERIC, `total_wlose` NUMERIC, `BMI` NUMERIC, `remark` TEXT )");
-    db.run("CREATE TABLE 'user_profile' ( `memberno` TEXT NOT NULL, `reg_date` TEXT, `person_nm` TEXT, `person_add` TEXT, `person_ref` TEXT, `person_cont1` INTEGER, `person_cont2` INTEGER, `person_email` TEXT, `person_gender` INTEGER, `person_mr_states` INTEGER, `person_birthday` TEXT, `person_height` NUMERIC, `person_weight` NUMERIC, `BMI` NUMERIC )");
-    alert("tabel created");
-}
+// exports.createtable = function(err) {
+//     if (err) {
+//         alert("error at create table" + err.message);
+//     }
+//     db.run("create table if not exists customers (user_info)");
+//     db.run("CREATE TABLE if not exists images_table ( `memberno` TEXT NOT NULL, `img1` BLOB DEFAULT null, `img2` BLOB DEFAULT null, `img3` BLOB DEFAULT null, `img4` BLOB DEFAULT null, `img5` BLOB DEFAULT null )");
+//     db.run("CREATE TABLE `measurement_table` ( `memberno` TEXT NOT NULL, `mgt_date` TEXT, `mgt_height` NUMERIC, `mgt_weight` NUMERIC, `mgt_neck` NUMERIC, `mgt_sholder` NUMERIC, `mgt_midarm` NUMERIC, `mgt_chest` NUMERIC, `mgt_waist` NUMERIC, `mgt_hips` NUMERIC, `mgt_wbyh` NUMERIC, `total_inch` NUMERIC, `inch_diff` NUMERIC, `total_inch_diff` NUMERIC, `weight_diff` NUMERIC, `total_weight_diff` NUMERIC, `BMI` NUMERIC )");
+//     db.run("CREATE TABLE 'progress_table' ( `memberno` TEXT NOT NULL, `prog_date` TEXT, `prog_weight` NUMERIC, `foodpkt` NUMERIC, `recip1` NUMERIC, `recip2` NUMERIC, `recip3` NUMERIC, `recip4` NUMERIC, `total_recip` NUMERIC, `prog_food` NUMERIC, `total_food` NUMERIC, `month` NUMERIC, `weight_lose` NUMERIC, `total_wlose` NUMERIC, `BMI` NUMERIC, `remark` TEXT )");
+//     db.run("CREATE TABLE 'user_profile' ( `memberno` TEXT NOT NULL, `reg_date` TEXT, `person_nm` TEXT, `person_add` TEXT, `person_ref` TEXT, `person_cont1` INTEGER, `person_cont2` INTEGER, `person_email` TEXT, `person_gender` INTEGER, `person_mr_states` INTEGER, `person_birthday` TEXT, `person_height` NUMERIC, `person_weight` NUMERIC, `BMI` NUMERIC )");
+//     alert("tabel created");
+//}
 
 
 // Adds a person
@@ -46,17 +50,11 @@ exports.addPerson = function(sql, stringarray) {
 };
 
 // Returns all persons
-exports.getPersons = function(fnc) {
+exports.getPersons = function(id, fnc) {
 
-    db.all("SELECT * from customers", function(err, rows) {
+    db.all("select it.img1 as img,up.person_nm as name from user_profile up,images_table it  where up.memberno=? group by up.memberno ", id, function(err, rows) {
         fnc(rows);
     });
-    // Get all persons from the database
-    // db.find({}, function(err, docs) {
-
-    //   // Execute the parameter function
-    //   fnc(docs);
-    // });
 }
 
 exports.getallrows = function(fna) {
@@ -70,7 +68,7 @@ exports.getallrows = function(fna) {
         if (err) {
             throw err;
         }
-        console.log(rows);
+        //console.log(rows);
         fna(rows);
     });
 
@@ -192,13 +190,13 @@ exports.getallrowsbyname = function(name, fna) {
     //     fnc(rows);
     // });
     //var sql = `select up.memberno as num,it.img1 as img,up.person_nm as name,pt.prog_date as last,up.person_weight as iweight,pt.prog_weight as cweight,up.person_weight as tweight from user_profile up,progress_table pt,images_table it where up.person_nm like '%?%' group by up.memberno`;
-
+    console.log("finding word- " + name);
     var sql = `select * from user_profile where person_nm like '%vai%'`; // where person_nm like '%" + name + "%'";
-    db.all(sql, (err, rows) => {
+    db.all(sql, [], (err, rows) => {
         if (err) {
-            throw err;
+            return console.error(err.message);
         }
-        // console.log("get name by person:=" + rows);
+
         fna(rows);
     });
 
@@ -248,26 +246,23 @@ exports.getDatefromdtp = function(mdate, getdt) {
 
 }
 
-exports.getdata = function() {
-    var readRecordsFromMediaTable = function() {
-        return new Promise(function(resolve, reject) {
-            var responseObj;
-            db.all("SELECT * FROM user_info", null, function cb(err, rows) {
-                if (err) {
-                    responseObj = {
-                        'error': err
-                    };
-                    reject(responseObj);
-                } else {
-                    responseObj = {
-                        statement: this,
-                        rows: rows
-                    };
-                    resolve(responseObj);
-                }
-                db.close();
-            });
+exports.readRecordsFromMediaTable = function() {
+    return new Promise(function(resolve, reject) {
+        var responseObj;
+        db.all("SELECT * FROM user_info", null, function cb(err, rows) {
+            if (err) {
+                responseObj = {
+                    'error': err
+                };
+                reject(responseObj);
+            } else {
+                responseObj = {
+                    statement: this,
+                    rows: rows
+                };
+                resolve(responseObj);
+            }
+            db.close();
         });
-    }
-    console.log(readRecordsFromMediaTable());
+    });
 }

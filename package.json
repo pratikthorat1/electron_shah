@@ -11,6 +11,7 @@
   "license": "MIT",
   "devDependencies": {
     "electron": "^1.4.8",
+    "electron-builder": "^19.49.0",
     "electron-rebuild": "^1.6.0"
   },
   "dependencies": {

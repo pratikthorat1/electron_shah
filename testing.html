@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Simple search filter - ul</title>
+    <style>
+        body {
+            background: #fff;
+            color: #000;
+            font: 75%/1.5em Arial, Helvetica, "DejaVu Sans", "Liberation sans", "Bitstream Vera Sans", sans-serif;
+        }
+        
+        #wrap {
+            width: 500px;
+            position: relative;
+            left: 50%;
+            margin-left: -250px;
+        }
+        
+        #header {
+            position: relative;
+            line-height: 1em;
+        }
+        
+        input {
+            border: 1px solid #ccc;
+            border-bottom-color: #eee;
+            border-right-color: #eee;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            -webkit-box-sizing: border-box;
+            -ms-box-sizing: border-box;
+            font-size: 1em;
+            height: 2.25em;
+            *height: 1.5em;
+            line-height: 1.5em;
+            padding: 0.29em 0;
+            width: 100%;
+            margin: 0 0 0.75em;
+        }
+        
+        .filterform {
+            width: 220px;
+            font-size: 12px;
+            display: block;
+        }
+        
+        .filterform input {
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;
+        }
+        
+        .entry {
+            margin: 0 0 0 0;
+            padding: 3px 0;
+            border-top: solid thin #666;
+            border-bottom: solid thin #222;
+            height: 85px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .movieTitle {
+            font-size: 16px;
+            color: black;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #000;
+        }
+        
+        .field {
+            font-weight: bold;
+            color: #777;
+        }
+        
+        .info {
+            color: #000;
+        }
+    </style>
+    <script src="http://code.jquery.com/jquery-1.4.2.min.js"></script>
+    <script>
+        (function($) {
+            jQuery.expr[':'].Contains = function(a, i, m) {
+                return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+            };
+
+            function listFilter(header, list) {
+                var form = $("<form>").attr({
+                        "class": "filterform",
+                        "action": "#"
+                    }),
+                    input = $("<input>").attr({
+                        "class": "filterinput",
+                        "type": "text"
+                    });
+                $(form).append(input).appendTo(header);
+
+                $(input)
+                    .change(function() {
+                        var filter = $(this).val();
+                        if (filter) {
+                            // $(list).find(".movieTitle:not(:Contains(" + filter + "))").parent().slideUp();
+                            // $(list).find(".movieTitle:Contains(" + filter + ")").parent().slideDown();
+                            $(list).find(".movieTitle:not(:Contains(" + filter + "))").parent().fadeOut(1600, complete);;
+                            $(list).find(".movieTitle:Contains(" + filter + ")").parent().show();
+                        } else {
+                            $(list).find(".entry").show();
+                            //fadeToggle("slow", "linear")
+                        }
+                        return false;
+                    })
+                    .keyup(function() {
+                        $(this).change();
+                    });
+            }
+
+            $(function() {
+                listFilter($("#header"), $("#list"));
+            });
+        }(jQuery));
+    </script>
+
+</head>
+
+<body>
+    <div id="wrap">
+        <h1 id="header">DVD Collection</h1>
+        <div id="list">
+            <div class="entry">
+                <div class="movieTitle">12 Angry Men</div>
+                <div class="info"><span class="field">Year:</span> 1957</div>
+                <div class="info"><span class="field">Rated:</span> U</div>
+                <div class="info"><span class="field">Genre:</span> Drama, Thriller, Classics</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">2012</div>
+                <div class="info"><span class="field">Year:</span> 2009</div>
+                <div class="info"><span class="field">Rated:</span> 12</div>
+                <div class="info"><span class="field">Genre:</span> Action &amp; Adventure, Thriller</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Abbot and Costello - Africa Screams</div>
+                <div class="info"><span class="field">Year:</span> 1949</div>
+                <div class="info"><span class="field">Rated:</span> U</div>
+                <div class="info"><span class="field">Genre:</span> Comedy, Classics, Horror</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Abbot and Costello - Meet Frankenstein/Meet The Mummy</div>
+                <div class="info"><span class="field">Year:</span> 1955</div>
+                <div class="info"><span class="field">Rated:</span> PG</div>
+                <div class="info"><span class="field">Genre:</span> Comedy, Horror, Classics</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Aladdin</div>
+                <div class="info"><span class="field">Year:</span> 1992</div>
+                <div class="info"><span class="field">Rated:</span> U</div>
+                <div class="info"><span class="field">Genre:</span> Animation, Children&#39;s, Family</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Alice in Wonderland</div>
+                <div class="info"><span class="field">Year:</span> 2010</div>
+                <div class="info"><span class="field">Rated:</span> PG</div>
+                <div class="info"><span class="field">Genre:</span> Family, Action &amp; Adventure, Science Fiction &amp; Fantasy</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Alvin and the Chipmunks</div>
+                <div class="info"><span class="field">Year:</span> 2007</div>
+                <div class="info"><span class="field">Rated:</span> U</div>
+                <div class="info"><span class="field">Genre:</span> Children&#39;s, Family</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Angels and Demons</div>
+                <div class="info"><span class="field">Year:</span> 2008</div>
+                <div class="info"><span class="field">Rated:</span> 12</div>
+                <div class="info"><span class="field">Genre:</span> Drama, Thriller</div>
+            </div>
+
+            <div class="entry">
+                <div class="movieTitle">Batman Begins</div>
+                <div class="info"><span class="field">Year:</span> 2005</div>
+                <div class="info"><span class="field">Rated:</span> 12</div>
+                <div class="info"><span class="field">Genre:</span> Action &amp; Adventure, Thriller</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

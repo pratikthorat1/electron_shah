@@ -1,12 +1,16 @@
 const database = require('./js/database');
-const image2base64 = require('image-to-base64');
 var assert = require('assert');
-var fs = require('fs');
+var fs = require('fs-extra');
 var path = require('path');
-var base64Img = require('./node_modules/base64-img');
-
+var readImageData = require('read-image-data');
+var convert = require('node-image-base64');
 
 var userid;
+var basedir = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
+//console.log(window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/')))
+//fs.copySync(path.resolve(__dirname,'./mainisp.jpg'), './test/mainisp.jpg');
+//fs.copySync('C:/Users/lenovo/Desktop/shreepressing/2.jpg', 'C:/Users/lenovo/Desktop/shreepressing/vaibhav/2.png');
+
 const reader = new FileReader();
 window.onload = function() {
     // var user = $_GET('user');
@@ -51,88 +55,55 @@ window.onload = function() {
     // console.log('height in feet' + getHeightincm(4, 10));
     // console.log('BMI cal - ' + getBMI(getHeightincm(5, 10), 80));
     // Populate the table
+    //console.log(window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/')))
+    //fs.copySync(path.resolve(__dirname,'./mainisp.jpg'), './test/mainisp.jpg');
+    //fs.copySync('C:/Users/lenovo/Desktop/shreepressing/2.jpg', 'C:/Users/lenovo/Desktop/shreepressing/vaibhav/2.png');
+
+    populateTable(userid);
     populateProgressTable(userid);
     populateMeasurementTable(userid);
     populateImagesTable(userid)
         // populateTable();
         //tablecreate();
 
-    // // Add the add button click event
-    // document.getElementById('add').addEventListener('click', () => {
-
-    //     // // Retrieve the input fields
-    //     var firstname = document.getElementById('firstname').value;
-    //     // var lastname = document.getElementById('lastname');
-
-    //     // var sql=`INSERT INTO customers(user_info,accountno,name) VALUES(?,?,?)`;
-    //     // var stringarr=[];
-    //     // stringarr[0]=firstname.value;
-    //     // stringarr[1]=1111;
-    //     // stringarr[2]=lastname.value;
-    //     // // Save the person in the database
-    //     // database.addPerson(sql,stringarr);
-
-    //     // // Reset the input fields
-    //     // firstname.value = '';
-    //     // lastname.value = '';
-
-    //     // // Repopulate the table
-    //     // populateTable();
-    //     populateProgressTable(firstname);
-    // });
-
-    // Add the update button click event
-    //     document.getElementById('update').addEventListener('click', () => {
-    //         $("#myModal").modal('show');
-    //         // Retrieve the input fields
-    //         var firstname = document.getElementById('firstname');
-    //         var lastname = document.getElementById('lastname');
-
-    //         var sql = `Update customers set name=? where accountno=?`;
-
-    //         var stringarr = [];
-    //         stringarr[0] = document.getElementById('firstname').value;
-    //         stringarr[1] = ocument.getElementById('lastname').value;
-    //         // stringarr[2]=lastname.value;
-    //         // Save the person in the database
-    //         database.updatePerson(sql, stringarr);
-
-    //         // Reset the input fields
-    //         firstname.value = '';
-    //         lastname.value = '';
-
-    //         // Repopulate the table
-    //         populateTable();
-    //     });
 }
 
 
 
 
 // Populates the persons table
-function populateTable() {
+function populateTable(id) {
 
     // selectuser();
 
     // Retrieve the persons
-    database.getPersons(function(persons) {
+    database.getPersons(id, function(persons) {
 
         // Generate the table body
         var tableBody = '';
         for (i = 0; i < persons.length; i++) {
+            var data = persons[i].img;
+
+            // Convert the string to bytes
+            var bytes = new Uint8Array(data.length / 2);
+
+            for (var j = 0; j < data.length; j += 2) {
+                bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
+            }
+
+            // Make a Blob from the bytes
+            var blob = new Blob([bytes], { type: 'image/bmp' });
+
             tableBody += '<tr>';
-            tableBody += '  <td>' + persons[i].accountno + '</td>';
-            tableBody += '  <td>' + persons[i].name + '</td>';
-            tableBody += '  <td><i class="fa fa-pencil" aria-hidden="true" onclick="updatePerson(\'' + persons[i].accountno + '\')" "></i>'
-            tableBody += '  <td><i class="fa fa-trash" aria-hidden="true" onclick="deletePerson(\'' + persons[i].accountno + '\')" "></i></td>'
-                //  tableBody += '  <input type="button" value="Delete" onclick="deletePerson(\'' + persons[i].accountno + '\')">'
-                //  tableBody += '  <input type="button" class="icon " value="Update" onclick="updatePerson(\'' + persons[i].accountno + '\')"></td>'
+            // tableBody += '  <td>' + persons[i].person_nm + '</td>';
+            tableBody += '<img id="check" class="profile" src="' + URL.createObjectURL(blob) + '"> <h1>' + persons[i].name + '</h1>';
+            // tableBody += ' <h3>Last Visit:' + persons[i].last + '</h3>';
             tableBody += '</tr>';
 
         }
 
         // Fill the table content
-        document.getElementById('tablebody').innerHTML = tableBody;
+        document.getElementById('tableprofile').innerHTML = tableBody;
     });
 }
 
@@ -449,56 +420,52 @@ function saveMeasurementtable() {
     populateMeasurementTable(userid);
 }
 
+function checkIfFile(file, cb) {
+    fs.stat(file, function fsStat(err, stats) {
+        if (err) {
+            if (err.code === 'ENOENT') {
+                return cb(null, false);
+            } else {
+                return cb(err);
+            }
+        }
+        return cb(null, stats.isFile());
+    });
+}
+
+
 //get photos from database for this user
 function populateImagesTable(id) {
+    var Folderpath = path.resolve('./img/' + id + '/');
+    console.log(Folderpath);
 
-    database.getPersonsImages(id, function(persons) {
+    var img2 = Folderpath + '\\img2.png';
+    var img3 = Folderpath + '\\img3.png';
+    var img4 = Folderpath + '\\img4.png';
 
-
-        if ((persons.img2) != null && (persons.img2) != "") {
-            var data = persons.img2;
-
-            // var bytes = new Uint8Array(data.length / 2);
-            // for (var j = 0; j < data.length; j += 2) {
-            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            // }
-            // // Make a Blob from the bytes
-            // var blob = new Blob([bytes], { type: 'image/bmp' });
-
-            document.getElementById('img1').src = ("data:image/png;base64," + data); //URL.createObjectURL(blob);
-
-        } else {
-            document.getElementById('img1').src = "img/user.png";
-            //var bb = new blob()
-        }
-        if ((persons.img3) != null && (persons.img3) != "") {
-            var data = persons.img3;
-            // var bytes = new Uint8Array(data.length / 2);
-            // for (var j = 0; j < data.length; j += 2) {
-            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            // }
-            // // Make a Blob from the bytes
-            // var blob = new Blob([bytes], { type: 'image/bmp' });
-
-            document.getElementById('img2').src = ("data:image/png;base64," + data); //URL.createObjectURL(data);
+    checkIfFile(img2, function(err, isFile) {
+        if (isFile) {
+            document.getElementById('img2').src = img2;
         } else {
             document.getElementById('img2').src = "img/user.png";
         }
-        if ((persons.img4) != null && (persons.img4) != "") {
-            var data = persons.img4;
-            // var bytes = new Uint8Array(data.length / 2);
-            // for (var j = 0; j < data.length; j += 2) {
-            //     bytes[j / 2] = parseInt(data.substring(j, j + 2), /* base = */ 16);
-            // }
-            // // Make a Blob from the bytes
-            // var blob = new Blob([bytes], { type: 'image/bmp' });
-
-            document.getElementById('img3').src = ("data:image/png;base64," + data); // URL.createObjectURL(blob);
+    });
+    checkIfFile(img3, function(err, isFile) {
+        if (isFile) {
+            document.getElementById('img3').src = img3;
         } else {
             document.getElementById('img3').src = "img/user.png";
         }
-        // console.log(persons);
     });
+    checkIfFile(img4, function(err, isFile) {
+        if (isFile) {
+            document.getElementById('img4').src = img4;
+        } else {
+            document.getElementById('img4').src = "img/user.png";
+        }
+    });
+
+
 }
 
 var profileImage;
@@ -506,9 +473,11 @@ var profileImage;
 function previewFile(id) {
     var _URL = window.URL || window.webkitURL;
     var file;
-    var image = document.getElementById('img' + id);
+    var pid = id + 1;
+    var image = document.getElementById('img' + pid);
     if ((file = $("#input" + id)[0].files[0])) {
         image.src = file.path; // ("data:image/png;base64," + data);
+        profileImage = file.path;
     }
 
 
@@ -618,75 +587,26 @@ function readFile(filepath) {
 
 //update image in to database
 function uploadImg(id) {
-    var imgData = document.getElementById("img1");
-    console.log(imgData.src);
-    image2base64(imgData.src)
-        .then(
-            (response) => {
-                console.log(response); //cGF0aC90by9maWxlLmpwZw==
-                if (response != null || response != "") {
-                    var details = [response, userid];
+    // var imgData = document.getElementById("img" + id);
+    // var strpath = imgData.src;
+    // console.log(strpath.lastIndexOf('file:'));
+    // console.log(path.resolve(__dirname, imgData.src));
+    // var filenm = strpath.substr(strpath.lastIndexOf('file:'));
+    // __parentdir = path.dirname(process.mainModule.filename);
+    var i1 = profileImage; //path.resolve(__parentdir, imgData.src)
+    var i2 = './img/' + userid + '/img' + id + '.png'
 
-                    var sql = `update images_table set img2=? where memberno=?`;
-                    database.updatePerson(sql, details);
-                }
-            }
-        )
-        .catch(
-            (error) => {
-                console.log(error); //Exepection error....
-            }
-        )
-        // blobUtil.imgSrcToBlob(imgData.src).then(function(blob) {
-        //     var i = Json.stringify(blob);
-        //     console.log(i);
-        //     console.log(blob);
-        //     // success
-        // }).catch(function(err) {
-        //     // error
-        // });
+    fs.copySync(i1, i2);
 
-    // var t1 = $("#input" + id)[0].files[0].path;
-    // var demo = readFile(t1);
-    // var t1 = dataURItoBlob(demo);
-    // console.log(t1);
-    // console.log(demo);
-
-    // blobUtil.base64StringToBlob(demo).then(function(blob) {
-    //     var i = json.stringify(blob);
-    //     console.log(i);
-    //     // success
-    // }).catch(function(err) {
-    //     // error
-    // });
-
-    // var pid = id + 1;
-    // // console.log(profileImage.img);
-    // if (demo != null || demo != "") {
-    //     var details = [demo, userid];
-
-    //     var sql = `update images_table set img2=? where memberno=?`;
-    //     database.updatePerson(sql, details);
-    // }
-}
-
-function encodeImageFileAsURL() {
-
-    var filesSelected = document.getElementById("input1").files;
-    if (filesSelected.length > 0) {
-        var fileToLoad = filesSelected[0];
-
-        var fileReader = new FileReader();
-
-        fileReader.onload = function(fileLoadedEvent) {
-            var srcData = fileLoadedEvent.target.result; // <--- data: base64
-
-            var newImage = document.createElement('img');
-            newImage.src = srcData;
-            document.getElementById("img2").src = srcData;
-            //alert("Converted Base64 version is " + document.getElementById("imgTest").innerHTML);
-            console.log("Converted Base64 version is " + document.getElementById("img2").src);
-        }
-        fileReader.readAsDataURL(fileToLoad);
-    }
+    $.toast({
+        text: "Image Uploading",
+        showHideTransition: 'slide', // It can be plain, fade or slide
+        bgColor: 'green', // Background color for toast
+        textColor: 'white', // text color
+        allowToastClose: false, // Show the close button or not
+        hideAfter: 2000, // `false` to make it sticky or time in miliseconds to hide after
+        stack: 5, // `fakse` to show one stack at a time count showing the number of toasts that can be shown at once
+        textAlign: 'left', // Alignment of text i.e. left, right, center
+        position: 'top-right' // bottom-left or bottom-right or bottom-center or top-left or top-right or top-center or mid-center or an object representing the left, right, top, bottom values to position the toast on page
+    });
 }

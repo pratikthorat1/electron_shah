@@ -5,6 +5,7 @@
     <title>Weight Wonders</title>
     <link rel="stylesheet" href="css/skeleton.css">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/awesomplete.css">
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -12,8 +13,54 @@
         window.$ = window.jQuery = require("jquery");
     </script>
     <script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="js/awesomplete.js" async></script>
     <script src="./node_modules/blob-util/dist/blob-util.js"></script>
     <script type="text/javascript" src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- 
+    <script>
+        (function($) {
+            jQuery.expr[':'].Contains = function(a, i, m) {
+                return (a.textContent || a.innerText || "").toUpperCase().indexOf(m[3].toUpperCase()) >= 0;
+            };
+
+            function listFilter(header, list) {
+                // var form = $("<form>").attr({
+                //         "class": "filterform",
+                //         "action": "#"
+                //     }),
+                //     input = $("<input>").attr({
+                //         "class": "filterinput",
+                //         "type": "text"
+                //     });
+                // $(form).append(input).appendTo(header);
+
+                $(search)
+                    .change(function() {
+                        var filter = $(this).val();
+                        if (filter) {
+                            //    $(list).find(".team-container:not(:Contains(" + filter + "))").parent().slideUp();
+                            //    $(list).find(".team-container:Contains(" + filter + ")").parent().slideDown();
+                            $(list).find(".team-container:not(:Contains(" + filter + "))").parent().hide();
+                            $(list).find(".team-container:Contains(" + filter + ")").parent().show();
+
+                        } else {
+                            // $(list).find(".row").slideDown();
+                            $(list).find(".row").show();
+                        }
+                        return false;
+                    })
+                    .keyup(function() {
+                        $(this).change();
+                    });
+            }
+
+            $(function() {
+                listFilter($("#header"), $("#list"));
+            });
+        }(jQuery)); -->
+    </script>
+
+
 </head>
 
 <body>
@@ -30,7 +77,12 @@
         <div id="getimage">
 
         </div>
-        <div class="row" id="users">
+
+        <h1 id="header"></h1>
+        <div id="list">
+            <div class="row" id="users">
+            </div>
+
         </div>
     </div>
     <a class="mybirth" id="birthbtn" onclick="openModal();">

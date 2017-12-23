@@ -32,13 +32,26 @@ window.onload = function() {
         $("#imageUpload").click();
     });
 
-    $("#search").change(function() {
-        populateTableByName();
-    });
+    // $("#search").change(function() {
+    //     populateTableByName();
+    //     //database.readRecordsFromMediaTable();
+    // });
+    // var $rows = $('#users');
+    // $('#search').keyup(function() {
+    //     var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+
+    //     $rows.show().filter(function() {
+    //         var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+    //         return !~text.indexOf(val);
+    //     }).hide();
+    // });
+
 
     $("#imageUpload").change(function() {
         fasterPreview(this);
     });
+
+    var input = document.getElementById("search");
 
 
 
@@ -88,6 +101,16 @@ window.onload = function() {
     //     //     populateTable();
     // });
     // }
+    var viewData = {};
+
+    function onGeneratedRow(columnsResult) {
+        var jsonData = {};
+        columnsResult.forEach(function(column) {
+            var columnName = column.metadata.colName;
+            jsonData[columnName] = column.value;
+        });
+        viewData.profiles.push(jsonData);
+    }
 
     // // Populates the persons table
     function populateTable() {
@@ -96,8 +119,12 @@ window.onload = function() {
 
         // Retrieve the persons
         database.getallrows(function(persons) {
-            //console.log(persons);
+            console.log(persons);
+            viewData = persons;
+
+
             // Generate the table body
+            var test = [];
             var tableBody = '';
             for (i = 0; i < persons.length; i++) {
                 var data = persons[i].img;
@@ -113,6 +140,8 @@ window.onload = function() {
                 // Make a Blob from the bytes
                 var blob = new Blob([bytes], { type: 'image/bmp' });
 
+                test.push(" " + persons[i].name + " ");
+
                 // Use createObjectURL to make a URL for the blob
                 tableBody += '<div class = "col-md-4" ><a href = "userdetails.html?user=' + persons[i].num + '" >';
                 tableBody += '<div class="team-container">';
@@ -124,6 +153,20 @@ window.onload = function() {
 
             // Fill the table content
             document.getElementById('users').innerHTML = tableBody;
+
+            new Awesomplete(input, {
+                list: [test],
+                data: function(text, input) {
+                    return input.slice(0, input.indexOf("@")) + "@" + text;
+                },
+                // item: function(text, input) {
+                //     return Awesomplete.ITEM(text, input.match(/[^,]*$/)[0]);
+                // },
+            });
+            // console.log(test);
+            // console.log(test.sort());
+            // console.log(test.reverse());
+
         });
     }
 
